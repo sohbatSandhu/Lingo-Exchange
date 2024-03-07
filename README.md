@@ -18,6 +18,18 @@ Given this high-level goal, we consider the domain of our application to be lang
 - Create the "Start Learning Journey" button and integrate its functionality of adding the user to the DB and assign a unique User Id or allow the user to choose the username.
 - Ensure proper validation for input fields (eg username uniqueness).
 
+### Task 2: Interface for users to act as a home section to connect to other sections and choose languages
+##### Timeline: March 23 - April 5
+- Plan the layout and design of the Home Section.
+- Determine the placement and appearance of the language selection dropdown and "Submit" button, “View Current Languages” button, “Practice Language Section” button, and “Language Interaction Section” button.
+##### GUI COMPONENTS
+- Implement the dropdown menu for selecting language and dialect combinations.
+- Create the "Submit" button and integrate its functionality to initiate language selection.
+- Ensure the dropdown menu displays all available language and dialect options dynamically.
+- Implement a “View languages” button that allows us to view and edit the languages we are currently learning.
+- Implement a “Practice language section” button that allows us to move to the section where we can get the resources for any language practice.
+- Implement a “Language Interaction section” button that allows us to move to the section where we can get language expert information assigned of our choosing and edit forum interaction.
+
 ## Language Practice Page - Annie  
 ### **Task 1:** Interface for the user to input Language and Dialect to search for resources.  
 ##### **Timeline:** Mar 15 - Mar 22  
