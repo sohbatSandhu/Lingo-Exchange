@@ -52,6 +52,8 @@ Given this high-level goal, we consider the domain of our application to be lang
 ##### **Timeline:** Mar 15 - Mar 29 
 ### **Task 3:** Ensure that all sections are well integrated/connected to each other
 ##### **Timeline:** Mar 15 - Apr 5
+### **Task 4:** Ensure that all SQL operations required for Milestone 4 are included in the project
+##### **Timeline:** Mar 15 - Apr 5
 
 
 # Milestone 3 Challenges
