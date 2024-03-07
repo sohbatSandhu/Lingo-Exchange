@@ -7,7 +7,16 @@ Given this high-level goal, we consider the domain of our application to be lang
 ---
 
 # Milestone 3 Timeline 
-## Welcome/Home Page - Sohbat  
+
+## Welcome/Home Page - Sohbat
+### Task 1: Interface for users to create an account with valid information (according to DB design)
+##### Timeline: March 15 - 22
+- Determine the layout and design of the welcome/create account section.
+- Decide on the placement of text inputs and buttons on the GUI.
+##### GUI COMPONENTS:
+- Implement the text input fields for User attributes (username, password, age).
+- Create the "Start Learning Journey" button and integrate its functionality of adding the user to the DB and assign a unique User Id or allow the user to choose the username.
+- Ensure proper validation for input fields (eg username uniqueness).
 
 ## Language Practice Page - Annie  
 ### **Task 1:** Interface for the user to input Language and Dialect to search for resources.  
