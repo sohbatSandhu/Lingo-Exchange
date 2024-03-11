@@ -51,8 +51,13 @@ Given this high-level goal, we consider the domain of our application to be lang
 ## Language Interaction Page - Romina  
 ### **Task 1:** Interface for the user to view, select, and remove their assigned expert.
 ##### **Timeline:** Mar 15 - Mar 22 
+- Will include an insert operation here as a part of enabling the user to select an expert.
+- Will include an update operation here as a part of enabling the user to change their assigned expert.
+- Will include a delete operation here as a part of enabling the user to remove their assigned expert.
+- Will include a select operation here as a part of filtering the experts by their specializations.
+- Will include a projection operation here as a part of displaying the available experts to the user.
 ##### **GUI Components:** 
-- View all available experts and their specializations by clicking the “View Experts” button.
+- View all available experts by clicking the “View Experts” button and provide the option to filter experts by their specialization.
 - View your current expert by clicking the “View My Expert” button.
 - Remove your currently assigned expert by inputting their email into a textbox and clicking the “Remove My Expert” button.
 - Get assigned to an expert by selecting an available expert from the dropdown options and then clicking the “Select this Expert” button.
@@ -60,6 +65,9 @@ Given this high-level goal, we consider the domain of our application to be lang
 
 ### **Task 2:** Interface for the user to view, join, and leave forums.
 ##### **Timeline:** Mar 23 - Apr 5
+- Will include an insert operation here as a part of enabling the user to join a forum.
+- Will include a delete operation here as a part of enabling the user to leave a forum.
+- Will include a projection operation here as a part of displaying the available forums to the user.
 ##### **GUI Components:** 
 - View all available forums by clicking the “View Forums” button.
 - View all the forums you’ve joined by clicking the “View My Forums” button.
