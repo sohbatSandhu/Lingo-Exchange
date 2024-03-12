@@ -11,24 +11,29 @@ Given this high-level goal, we consider the domain of our application to be lang
 ## Welcome/Home Page - Sohbat
 ### Task 1: Interface for users to create an account with valid information (according to DB design)
 ##### Timeline: March 15 - 22
-- Determine the layout and design of the welcome/create account section.
+- Determine the layout and design of the welcome/create account page.
 - Decide on the placement of text inputs and buttons on the GUI.
 ##### GUI COMPONENTS:
-- Implement the text input fields for User attributes (username, password, age).
+- Implement the text input fields for User attributes like username, password and age.
 - Create the "Start Learning Journey" button and integrate its functionality of adding the user to the DB and assign a unique User Id or allow the user to choose the username.
-- Ensure proper validation for input fields (eg username uniqueness).
+- Ensure proper validation for input fields (eg username uniqueness). 
+    - Could add funcitonality of the text box highlighting itself indicating the validation.
 
-### Task 2: Interface for users to act as a home section to connect to other sections and choose languages
+### Task 2: Interface for users to act as a home page to connect to other webpages and choose languages
 ##### Timeline: March 23 - April 5
-- Plan the layout and design of the Home Section.
-- Determine the placement and appearance of the language selection dropdown and "Submit" button, “View Current Languages” button, “Practice Language Section” button, and “Language Interaction Section” button.
+- Plan the layout and design of the Home Page.
+- Determine the placement and appearance of the "Select Language" button and "Submit" button, “View Current Languages” button, “Practice Language” button, and “Language Interaction” button.
 ##### GUI COMPONENTS
-- Implement the dropdown menu for selecting language and dialect combinations.
-- Create the "Submit" button and integrate its functionality to initiate language selection.
-- Ensure the dropdown menu displays all available language and dialect options dynamically.
-- Implement a “View languages” button that allows us to view and edit the languages we are currently learning.
-- Implement a “Practice language section” button that allows us to move to the section where we can get the resources for any language practice.
-- Implement a “Language Interaction section” button that allows us to move to the section where we can get language expert information assigned of our choosing and edit forum interaction.
+- Implement a "Select Language" language selection page which intiates the process of selecting a language with the following funtionality:
+    - Implement two dropdown menus for selecting language and dialect combinations.
+    - Ensure the dropdown menu displays all available language and dialect options dynamically.
+    - Click the "Submit" button to add the selected language to the current languages.
+    - Ensure there is no double selecting a language and dialect combination.
+- Implement a “View languages” button that allows the user to view and edit the languages the user is currently learning.
+    - Display the selected languages as a table.
+    - Add a "Delete" button which DELETES one or more (based on the user's choice) of the selected languages displayed in the table.
+- Implement a “Practice language” button that allows the user to navigate to the page where we can get the resources for any language practice.
+- Implement a “Language Interaction” button that allows the user to navigate to the page where we can get the information on the language expert, assigned to the user (according to the user's preference) and edit forum interaction.
 
 ## Language Practice Page - Annie  
 ### **Task 1:** Interface for the user to input Language and Dialect to search for resources.  
