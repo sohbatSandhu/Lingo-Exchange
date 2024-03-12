@@ -34,18 +34,20 @@ Given this high-level goal, we consider the domain of our application to be lang
 ### **Task 1:** Interface for the user to input Language and Dialect to search for resources.  
 ##### **Timeline:** Mar 15 - Mar 22  
 ##### **GUI Components:**  
-- Text inputs for language and dialect  
-- Implement a "search" button to display relevant resources  
-- Implement a dropdown section that displays the description of the resources and the author, developer, or URL  
+- Text inputs for language and dialect (INSERT statements)  
+- Implement a "search" button to display relevant resources (Projection)  
+- Implement a dropdown section that displays the description of the resources and the author, developer, or URL (Projection)  
 
 ### **Task 2:** Interface for the user to choose and complete exercise questions.  
 ##### **Timeline:** Mar 23 - Apr 5  
 ##### **GUI Components:**  
-- Text inputs for language and dialect  
-- Implement a “start exercise” button to display a dropdown menu of relevant exercises  
-- Click into each exercise dropdown option which redirects user to another page with a series of questions  
-- Click “submit” button to save the completion date  
-- Could change the color of the top bar to green or red to indicate whether the user completed the exercise within the time limit or not
+- Text inputs for language and dialect (INSERT statements)    
+- Implement a “start exercise” button to display a dropdown menu of relevant exercises (Projection). Each menu option will have 3 buttons to implement:  
+    - An info (i) button that displays the purpose of the exercise, time limit, and pending score (Projection)  
+    - An x button to DELETE any exercises the user doesn’t plan on doing  
+    - An arrow button that redirects the user to another page that displays a series of questions  
+- Click “submit” or "mark completed" button to UPDATE the completion date 
+    - Could change the color of the top bar to green or red to indicate whether the user completed the exercise within the time limit or not (Projection)
 
 
 ## Language Interaction Page - Romina  
