@@ -50,7 +50,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <body>
 	<h1 style="text-align:center">Experts Management Page</h1>
 	<h2>Request an Expert</h2>
-	<p>Get assigned to an expert by specifying their email address!</p>
+	<p>Get assigned to an expert by selecting one from our drop-down below!</p>
 	<form method="POST" action="experts.php">
 		<input type="hidden" id="requestExpertUpdateRequest" name="requestExpertUpdateRequest">
 		User ID: <input type="text" name="uid"> 
@@ -156,17 +156,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$statement = oci_parse($db_conn, $cmdstr);
 		//There are a set of comments at the end of the file that describe some of the OCI specific functions and how they work
 		if (!$statement) {
-			echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
+			// echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($db_conn); // For oci_parse errors pass the connection handle
-			echo htmlentities($e['message']);
+			// echo htmlentities($e['message']);
 			$response["success"] = False;
 		}
 
 		$r = oci_execute($statement, OCI_DEFAULT);
 		if (!$r) {
-			echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+			// echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 			$e = oci_error($statement); // For oci_execute errors pass the statementhandle
-			echo htmlentities($e['message']);
+			// echo htmlentities($e['message']);
 			$response["success"] = False;
 		}
 		$response["statement"] = $statement;
@@ -185,9 +185,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$response["success"] = True;
 		$statement = oci_parse($db_conn, $cmdstr);
 		if (!$statement) {
-			echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
+			// echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($db_conn);
-			echo htmlentities($e['message']);
+			// echo htmlentities($e['message']);
 			$response["success"] = False;
 		}
 		foreach ($list as $tuple) {
@@ -199,10 +199,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			}
 			$r = oci_execute($statement, OCI_DEFAULT);
 			if (!$r) {
-				echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+				// echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 				$e = OCI_Error($statement); // For oci_execute errors, pass the statementhandle
-				echo htmlentities($e['message']);
-				echo "<br>";
+				// echo htmlentities($e['message']);
+				// echo "<br>";
 				$response["success"] = False;
 			}
 		}
@@ -330,7 +330,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 								   WHERE L.ExpertEmail=E.ExpertEmail
 								   	AND L.UserID=:bind1", $alltuples);
 		oci_commit($db_conn);
-		printViewMyExpert($result["statement"]);
+		if ($result["success"] == TRUE) {
+			printViewMyExpert($result["statement"]);
+		}
+		if ($result["success"] == FALSE) {
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show your expert :( <br>
+					 Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
+		}
 	}
 
 	function handleViewFilteredExpertsGetRequest()
@@ -381,7 +387,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 								   GROUP BY City
 								   HAVING COUNT(*) >=:bind1", $alltuples);
 		oci_commit($db_conn);
-		printViewCities($result["statement"]);
+		if ($result["success"] == TRUE) {
+			printViewCities($result["statement"]);
+		}
+		if ($result["success"] == FALSE) {
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show the cities meeting the above condition :( <br>
+					Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
+		}
 	}
 
 	function handleRequestExpertUpdateRequest()
@@ -401,9 +413,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$result = executeBoundSQL("UPDATE Learner_Consults SET ExpertEmail=:bind2 WHERE UserID=:bind1 ", $alltuples);
 		oci_commit($db_conn);
 		if ($result["success"] == TRUE) {
-			echo "<br>SUCCESS: Your expert was just updated :)<br>";
+			echo "<p><font color=green> <b>SUCCESS</b>: Your expert was just updated :)</font></p>";
 		} else {
-			echo "<br>FAILURE: We encountered a problem when trying to update your expert :(<br>";
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to assign you and expert :( <br>
+					Make sure that you've entered a valid threshold value (which should be an integer).</font><p>";
 		}
 	}
 	
