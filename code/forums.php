@@ -152,17 +152,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$statement = oci_parse($db_conn, $cmdstr);
 		//There are a set of comments at the end of the file that describe some of the OCI specific functions and how they work
 		if (!$statement) {
-			echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
+			// echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($db_conn); // For oci_parse errors pass the connection handle
-			echo htmlentities($e['message']);
+			// echo htmlentities($e['message']);
 			$response["success"] = False;
 		}
 
 		$r = oci_execute($statement, OCI_DEFAULT);
 		if (!$r) {
-			echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+			// echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 			$e = oci_error($statement); // For oci_execute errors pass the statementhandle
-			echo htmlentities($e['message']);
+			// echo htmlentities($e['message']);
 			$response["success"] = False;
 		}
 		$response["statement"] = $statement;
@@ -181,9 +181,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$response["success"] = True;
 		$statement = oci_parse($db_conn, $cmdstr);
 		if (!$statement) {
-			echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
+			// echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($db_conn);
-			echo htmlentities($e['message']);
+			// echo htmlentities($e['message']);
 			$response["success"] = False;
 		}
 		foreach ($list as $tuple) {
@@ -195,10 +195,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			}
 			$r = oci_execute($statement, OCI_DEFAULT);
 			if (!$r) {
-				echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+				// echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 				$e = OCI_Error($statement); // For oci_execute errors, pass the statementhandle
-				echo htmlentities($e['message']);
-				echo "<br>";
+				// echo htmlentities($e['message']);
+				// echo "<br>";
 				$response["success"] = False;
 			}
 		}
@@ -283,7 +283,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		);
 		$result = executeBoundSQL("SELECT * FROM Participates WHERE UserID=:bind1", $alltuples);
 		oci_commit($db_conn);
-		printViewMyForums($result["statement"]);
+		if ($result["success"] == TRUE) {
+			printViewMyForums($result["statement"]);
+		}
+		if ($result["success"] == FALSE) {
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show your forums :( <br>
+					 Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
+		}
 	}
 
 	function handleFilterForumsGetRequest()
@@ -318,8 +324,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 		$alltuples = array($tuple);
 		$result = executeBoundSQL($query, $alltuples);
-		printFilteredForums($result["statement"]);
-		oci_commit($db_conn);	
+		oci_commit($db_conn);		
+		if ($result["success"] == TRUE) {
+			printFilteredForums($result["statement"]);
+		}
+		if ($result["success"] == FALSE) {
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show the filtered forums :( </font><p>";
+		}
 	}
 
 	function handleJoinForumInsertRequest()
@@ -339,9 +350,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$result = executeBoundSQL("INSERT INTO Participates VALUES (:bind1, :bind2)", $alltuples);
 		oci_commit($db_conn);
 		if ($result["success"] == TRUE) {
-			echo "<br>SUCCESS: You were just added to a forum :)<br>";
+			echo "<p><font color=green> <b>SUCCESS</b>: Your request was successfully processed :)</font></p>";
 		} else {
-			echo "<br>FAILURE: We encountered a problem when trying to add you to a forum :(<br>";
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to add you to a forum :( <br>
+					Make sure that you've entered a valid User ID (which should be an integer) 
+					and the URL to an <i>existing</i> Forum (use our view forums functionality to see what's available).</font><p>";
 		}
 	}
 	
@@ -362,9 +375,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$result = executeBoundSQL("DELETE FROM Participates WHERE UserID=:bind1 AND URL=:bind2", $alltuples);
 		oci_commit($db_conn);
 		if ($result["success"] == TRUE) {
-			echo "<br>SUCCESS: You were just removed from a forum :)<br>";
+			echo "<p><font color=green> <b>SUCCESS</b>: Your request was successfully processed :)</font></p>";
 		} else {
-			echo "<br>FAILURE: We encountered a problem when trying to remove you from a forum :(<br>";
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to remove you from a forum :( <br>
+					Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
 		}
 	}
 

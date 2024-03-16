@@ -413,7 +413,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$result = executeBoundSQL("UPDATE Learner_Consults SET ExpertEmail=:bind2 WHERE UserID=:bind1 ", $alltuples);
 		oci_commit($db_conn);
 		if ($result["success"] == TRUE) {
-			echo "<p><font color=green> <b>SUCCESS</b>: Your expert was just updated :)</font></p>";
+			echo "<p><font color=green> <b>SUCCESS</b>: Your request was successfully processed :)</font></p>";
 		} else {
 			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to assign you and expert :( <br>
 					Make sure that you've entered a valid threshold value (which should be an integer).</font><p>";
