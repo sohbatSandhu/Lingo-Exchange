@@ -39,21 +39,20 @@ Given this high-level goal, we consider the domain of our application to be lang
 ### **Task 1:** Interface for the user to input Language and Dialect to search for resources.  
 ##### **Timeline:** Mar 15 - Mar 22  
 ##### **GUI Components:**  
-- Text inputs for language and dialect (INSERT statements)  
-- Implement a "search" button to display relevant resources (Projection)  
-- Implement a dropdown section that displays the description of the resources and the author, developer, or URL (Projection)  
+- Implement 4 "view" buttons to allow users to view all materials, books, apps, and websites using select statements.  
+- Implement dropdown menu of languages and dialects so users can filter the resources they want to view.  
+- Implement an "add material" button so users can add materials using insert statement.  
+- Implement a "delete material" button so users can delete materials using delete statement.  
 
 ### **Task 2:** Interface for the user to choose and complete exercise questions.  
 ##### **Timeline:** Mar 23 - Apr 5  
 ##### **GUI Components:**  
-- Text inputs for language and dialect (INSERT statements)    
-- Implement a “start exercise” button to display a dropdown menu of relevant exercises (Projection). Each menu option will have 3 buttons to implement:  
-    - An info (i) button that displays the purpose of the exercise, time limit, and pending score (Projection)  
-    - An x button to DELETE any exercises the user doesn’t plan on doing  
-    - An arrow button that redirects the user to another page that displays a series of questions  
-- Click “submit” or "mark completed" button to UPDATE the completion date 
-    - Could change the color of the top bar to green or red to indicate whether the user completed the exercise within the time limit or not (Projection)
-
+- Implement user input to choose language and dialect.  
+- View a list of relevant exercises based on the given language and dialect using a select statement. Connect each exercise to a question page.  
+    - On the quesiton page, display relevant questions using a select statement.  
+    - Implement a "mark complete" button to mark a question as complete.  
+- Allow user to view the max, min, and/or average score for exercises grouping by language and usin aggregation.  
+- Allow user to view the count of exercise scores for each language that are above average using nested aggregation and group by.  
 
 ## Language Interaction Page - Romina  
 ### **Task 1:** Interface for the user to view, select, and remove their assigned expert.
