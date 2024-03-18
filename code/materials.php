@@ -101,12 +101,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	
 	<!-- TODO: Implement another user input for each dropdown option -->
 
-	<!-- <h2>Add Book</h2>
+	<h2>Add Book</h2>
 	<form method="POST" action="materials.php">
 		<input type="hidden" id="addBookRequest" name="addBookRequest">
 		MaterialID: <input type="text" name="mid"> <br /><br />
 		Author: <input type="text" name="author"> <br /><br />
-        <input type="submit" value="Add" name="addAuthor"></p>
+        <input type="submit" value="Add" name="addBook"></p>
 	</form> 
 	<hr />
 	
@@ -115,18 +115,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		<input type="hidden" id="addAppRequest" name="addAppRequest">
 		MaterialID: <input type="text" name="mid"> <br /><br />
 		Developer: <input type="text" name="dev"> <br /><br />
-        <input type="submit" value="Add" name="addDev"></p>
+        <input type="submit" value="Add" name="addApp"></p>
 	</form> 
 	<hr />
 	
 	<h2>Add Website</h2>
 	<form method="POST" action="materials.php">
-		<input type="hidden" id="addMatWebsiteRequest" name="addWebsiteRequest">
+		<input type="hidden" id="addWebsiteRequest" name="addWebsiteRequest">
 		MaterialID: <input type="text" name="mid"> <br /><br />
 		URL: <input type="text" name="url"> <br /><br />
-        <input type="submit" value="Add" name="addURL"></p>
+        <input type="submit" value="Add" name="addWebsite"></p>
 	</form> 
-	<hr /> -->
+	<hr />
 	
 
 	<h2>Remove Resource</h2>
@@ -269,14 +269,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
-			<th>MaterialName</th>
 			<th>Author</th>
 		</tr>";
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 				<td>" . $row[0] . "</td>
 				<td>" . $row[1] . "</td>
-				<td>" . $row[2] . "</td>
 			</tr>"; 
 		}
 		echo "</table>";
@@ -288,14 +286,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
-			<th>MaterialName</th>
 			<th>Developer</th>
 		</tr>";
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 				<td>" . $row[0] . "</td>
 				<td>" . $row[1] . "</td>
-				<td>" . $row[2] . "</td>
 			</tr>"; 
 		}
 		echo "</table>";
@@ -307,14 +303,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
-			<th>MaterialName</th>
 			<th>URL</th>
 		</tr>";
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 				<td>" . $row[0] . "</td>
 				<td>" . $row[1] . "</td>
-				<td>" . $row[2] . "</td>
 			</tr>"; 
 		}
 		echo "</table>";
@@ -330,21 +324,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleDiaplayAllBooksRequest()
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT b.*, m.MaterialName FROM Book b, Material m WHERE b.MaterialID = m.MaterialID");
+		$result = executePlainSQL("SELECT m.MaterialID, b.Author FROM Book b, Material m WHERE b.MaterialID = m.MaterialID");
 		printAllBooks($result["statement"]);
+
+		//TODO: display MaterialNames as well
 	}
 
 	function handleDiaplayAllAppsRequest()
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT a.*, m.MaterialName FROM App a, Material m WHERE a.MaterialID = m.MaterialID");
+		$result = executePlainSQL("SELECT m.MaterialID, a.Developer FROM App a, Material m WHERE a.MaterialID = m.MaterialID");
 		printAllApps($result["statement"]);
 	}
 
 	function handleDiaplayAllWebsitesRequest()
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT w.*, m.MaterialName FROM Website w, Material m WHERE w.MaterialID = m.MaterialID");
+		$result = executePlainSQL("SELECT m.MaterialID, w.URL FROM Website w, Material m WHERE w.MaterialID = m.MaterialID");
 		printAllWebsites($result["statement"]);
 	}
 
@@ -370,6 +366,75 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		if ($result["success"] == TRUE) {
 			echo "<p><font color=green> <b>SUCCESS</b>: Added a new resource :)</font></p>";
+		} else {
+			echo "<p><font color=red> <b>ERROR</b>: Try again!</font><p>";
+		}
+	}
+
+	function handleAddBookRequest()
+	{ //Getting the values from user input and insert data into Book table
+		global $db_conn;
+
+		$tuple = array(
+			":bind1" => $_POST['mid'],
+			":bind2" => $_POST['author']
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$result = executeBoundSQL("INSERT INTO Book VALUES (:bind1, :bind2)", $alltuples);
+		oci_commit($db_conn);
+
+		if ($result["success"] == TRUE) {
+			echo "<p><font color=green> <b>SUCCESS</b>: Added a new book :)</font></p>";
+		} else {
+			echo "<p><font color=red> <b>ERROR</b>: Try again!</font><p>";
+		}
+	}
+
+	function handleAddAppRequest()
+	{ //Getting the values from user input and insert data into App table
+		global $db_conn;
+
+		$tuple = array(
+			":bind1" => $_POST['mid'],
+			":bind2" => $_POST['dev']
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$result = executeBoundSQL("INSERT INTO App VALUES (:bind1, :bind2)", $alltuples);
+		oci_commit($db_conn);
+
+		if ($result["success"] == TRUE) {
+			echo "<p><font color=green> <b>SUCCESS</b>: Added a new app :)</font></p>";
+		} else {
+			echo "<p><font color=red> <b>ERROR</b>: Try again!</font><p>";
+		}
+	}
+
+	function handleAddWebsiteRequest()
+	{ //Getting the values from user input and insert data into Website table
+		global $db_conn;
+
+		$tuple = array(
+			":bind1" => $_POST['mid'],
+			":bind2" => $_POST['url']
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$result = executeBoundSQL("INSERT INTO Website VALUES (:bind1, :bind2)", $alltuples);
+		oci_commit($db_conn);
+
+		if ($result["success"] == TRUE) {
+			echo "<p><font color=green> <b>SUCCESS</b>: Added a new website :)</font></p>";
 		} else {
 			echo "<p><font color=red> <b>ERROR</b>: Try again!</font><p>";
 		}
@@ -405,6 +470,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		if (connectToDB()) {
 			if (array_key_exists('addMat', $_POST)) {
 				handleAddMatRequest();
+			} else if (array_key_exists('addBook', $_POST)) {
+				handleAddBookRequest();
+			} else if (array_key_exists('addApp', $_POST)) {
+				handleAddAppRequest();
+			} else if (array_key_exists('addWebsite', $_POST)) {
+				handleAddWebsiteRequest();
 			} else if (array_key_exists('deleteMat', $_POST)) {
 				handleDeleteMatRequest();
 			}
@@ -431,7 +502,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-	if (isset($_POST['addMatRequest']) || isset($_POST['deleteMatRequest']) ) {
+	if (isset($_POST['addMatRequest']) || isset($_POST['addBookRequest']) || isset($_POST['addAppRequest']) || isset($_POST['addWesbiteRequest']) || isset($_POST['deleteMatRequest'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['displayAllMat']) || isset($_GET['displayAllBooks']) || isset($_GET['displayAllApps']) || isset($_GET['displayAllWebsites'])) {
 		handleGETRequest();
