@@ -40,9 +40,9 @@ Given this high-level goal, we consider the domain of our application to be lang
 ##### **Timeline:** Mar 15 - Mar 22  
 ##### **GUI Components:**  
 - Implement 4 "view" buttons to allow users to view all materials, books, apps, and websites using select statements.  
-- Implement dropdown menu of languages and dialects so users can filter the resources they want to view.  
-- Implement an "add material" button so users can add materials using insert statement.  
-- Implement a "delete material" button so users can delete materials using delete statement.  
+- Implement 3 "add" buttons to allow users to INSERT materials that are books, apps, or websites.  
+- Implement an "update material" button to allow users to UPDATE the material name and purpose after adding a material.  
+- Implement a "delete material" button to allow users to DELETE materials.  
 
 ### **Task 2:** Interface for the user to choose and complete exercise questions.  
 ##### **Timeline:** Mar 23 - Apr 5  
@@ -51,8 +51,8 @@ Given this high-level goal, we consider the domain of our application to be lang
 - View a list of relevant exercises based on the given language and dialect using a select statement. Connect each exercise to a question page.  
     - On the quesiton page, display relevant questions using a select statement.  
     - Implement a "mark complete" button to mark a question as complete.  
-- Allow user to view the max, min, and/or average score for exercises grouping by language and usin aggregation.  
-- Allow user to view the count of exercise scores for each language that are above average using nested aggregation and group by.  
+- Allow user to view the max, min, and/or average score for exercises grouping by language and using aggregation.  
+- Allow user to view the count of exercise scores for each language that are above average using nested aggregation and group by statement.  
 
 ## Language Interaction Page - Romina  
 ### **Task 1:** Interface for the user to view, select, and remove their assigned expert.
