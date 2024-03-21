@@ -312,9 +312,9 @@ INSERT INTO Language2(LanguageName, Dialect) VALUES	('French', 'African French')
 INSERT INTO Language2(LanguageName, Dialect) VALUES	('German', 'Standard German');
 INSERT INTO Language2(LanguageName, Dialect) VALUES	('German', 'Swiss German');
 INSERT INTO Language2(LanguageName, Dialect) VALUES	('Chinese', 'Mandarin');
-INSERT INTO Language2(LanguageName, Dialect) VALUES	('Chinese', 'Sichuanese');
+INSERT INTO Language2(LanguageName, Dialect) VALUES	('Chinese', 'Shanghainese');
 INSERT INTO Language2(LanguageName, Dialect) VALUES ('Chinese', 'Cantonese');
-INSERT INTO Language2(LanguageName, Dialect) VALUES	('Korean', 'Gyeonggi dialect'); 
+INSERT INTO Language2(LanguageName, Dialect) VALUES	('Korean', 'Gyeonggi Dialect');  
 
 INSERT INTO Learner_Consults(UserID, UserName, Age, Password, ExpertEmail) VALUES (1, 'User 1', 21, 'pass1', 'romina.m@mail.com');
 INSERT INTO Learner_Consults(UserID, UserName, Age, Password, ExpertEmail) VALUES (2, 'User 2', 22, 'pass2', 'annie.w@mail.com');
@@ -344,20 +344,38 @@ INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Parisian Culture', 'Test y
 INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Chinese Vocabulary Quiz', 'Test Chinese vocabulary knowledge');
 INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Spanish Grammar Quiz', 'Practice Spanish grammar rules');
 INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('German Pronunciation Workout', 'Practice pronunciations for common German words');
+INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Korean Alphabet Quiz', 'Test your knowledge in Hangul');
+INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Mock Spelling Bee', 'Test your ability to spell English words');
+INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('French Pronunciation Quiz', 'Practice your French pronunciation');
+INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Chinese Oral Exercise', 'Test your Chinese pronunciation');
+INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Advanced Spanish Grammar Quiz', 'Practice advanced Spanish grammar rules');
+INSERT INTO Exercise1(ExerciseName, Purpose) VALUES ('Must-Know Korean Phrases', 'Test how well you know common Korean words and phrases');
 
 INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Active to Passive Voice English', '100');
 INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Parisian Culture', '100');
 INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Chinese Vocabulary Quiz', '90');
 INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Spanish Grammar Quiz', '60');
 INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('German Pronunciation Workout', NULL);
+INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Korean Alphabet Quiz', '45');
+INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Mock Spelling Bee', '15');
+INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('French Pronunciation Quiz', '30');
+INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Chinese Oral Exercise', '20');
+INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Advanced Spanish Grammar Quiz', '60');
+INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Must-Know Korean Phrases', '75');
 
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Active to Passive Voice English', 61, 0.905);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Active to Passive Voice English', 61, 0.90);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Parisian Culture', 62, 0.85);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Chinese Vocabulary Quiz', 63, NULL);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Spanish Grammar Quiz', 64, 0.95);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('German Pronunciation Workout', 65, 0.80);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Korean Alphabet Quiz', 92, 0.95);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Mock Spelling Bee', 93, 0.49);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('French Pronunciation Quiz', 94, 0.85);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Chinese Oral Exercise', 95, 0.88);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Advanced Spanish Grammar Quiz', 96, 0.75);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Must-Know Korean Phrases', 97, 0.97);
 
-INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('romina.m@mail.com', 'Korean', 'Gyeonggi dialect', 10);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('romina.m@mail.com', 'Korean', 'Gyeonggi Dialect', 10);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('annie.w@mail.com', 'Chinese', 'Mandarin', 10);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('sohbat.s@mail.com', 'English', 'American English', 20);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('james.w@mail.com', 'French', 'Canadian French', 10);
@@ -367,16 +385,16 @@ INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VAL
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'French', 'Belgian French', 5);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'German', 'Swiss German', 3);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'Chinese', 'Mandarin', 2);
-INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'Korean', 'Gyeonggi dialect', 2);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'Korean', 'Gyeonggi Dialect', 2);
 
-INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (1, 'Korean', 'Gyeonggi dialect', '01-SEP-23');
+INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (1, 'Korean', 'Gyeonggi Dialect', '01-SEP-23');
 INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (2, 'Chinese', 'Mandarin', '21-SEP-23');
 INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (3, 'English', 'American English', '12-OCT-23');
 INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (4, 'French', 'Canadian French', '10-APR-23');
 INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (5, 'Spanish', 'Latin American Spanish', '22-NOV-22');
 INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (6, 'German', 'Swiss German', '11-DEC-23');
 
-INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (1, 'Korean', 'Gyeonggi dialect', 35);
+INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (1, 'Korean', 'Gyeonggi Dialect', 35);
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (2, 'Chinese', 'Mandarin', 14);
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (3, 'English', 'American English', 24);
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (4, 'French', 'Canadian French', 31);
@@ -384,10 +402,18 @@ INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (5, 'Spanish'
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (6, 'German', 'Swiss German', 15);
 
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (1, 'German', 'Swiss German', 'German Pronunciation Workout', 65, '01-OCT-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Chinese', 'Mandarin', 'Chinese Vocabulary Quiz', 63, '01-JAN-24');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Chinese', 'Mandarin', 'Chinese Vocabulary Quiz', 63, '13-OCT-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Chinese', 'Mandarin', 'Chinese Oral Exercise', 95, '13-OCT-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Korean', 'Gyeonggi Dialect', 'Must-Know Korean Phrases', 97, '01-SEP-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'English', 'American English', 'Active to Passive Voice English', 61, '04-DEC-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'English', 'American English', 'Mock Spelling Bee', 93, '09-NOV-22');
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'English', 'American English', 'Active to Passive Voice English', 61, '09-NOV-22');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Korean Alphabet Quiz', 92, '12-SEP-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Must-Know Korean Phrases', 97, '13-SEP-23');
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (4, 'French', 'Canadian French', 'Parisian Culture', 62, '11-SEP-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (4, 'French', 'Canadian French', 'French Pronunciation Quiz', 94, '11-SEP-23');
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Spanish Grammar Quiz', 64, '02-FEB-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Advanced Spanish Grammar Quiz', 96, '04-FEB-23');
 
 INSERT INTO Forum1(Title, Purpose) VALUES ('General Discussion', 'Discuss various topics');
 INSERT INTO Forum1(Title, Purpose) VALUES ('Beginner Mandarin Chinese', 'Get help with Beginner Mandarin');
@@ -460,6 +486,10 @@ INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUE
 INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUES ('Parisian Culture', 62, 'Name Parisian actors', 'Advanced');
 INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUES ('Chinese Vocabulary Quiz', 63, 'Daily life vocabulary', 'Beginner');
 INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUES ('Chinese Vocabulary Quiz', 63, 'Work office vocabulary', 'Beginner');
+INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUES ('Korean Alphabet Quiz', 92, 'List all basic vowels', 'Beginner');
+INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUES ('Korean Alphabet Quiz', 92, 'List all basic consonants', 'Beginner');
+INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUES ('Mock Spelling Bee', 93, 'Spell the following words', 'Beginner');
+INSERT INTO Question_Has(ExerciseName, ExerciseNumber, QuestionName, Type) VALUES ('Must-Know Korean Phrases', 97, 'Pick the correct translation', 'Novice');
 
 INSERT INTO Participates(UserID, URL) VALUES (1, 'http://example.com/general-discussion');
 INSERT INTO Participates(UserID, URL) VALUES (1, 'http://example.com/beginner-mandarin-chinese');
