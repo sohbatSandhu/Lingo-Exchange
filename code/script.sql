@@ -365,12 +365,12 @@ INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Must-Know Korean Phrases
 
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Active to Passive Voice English', 61, 0.90);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Parisian Culture', 62, 0.85);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Chinese Vocabulary Quiz', 63, NULL);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Chinese Vocabulary Quiz', 63, 0.77);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Spanish Grammar Quiz', 64, 0.95);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('German Pronunciation Workout', 65, 0.80);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Korean Alphabet Quiz', 92, 0.95);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Mock Spelling Bee', 93, 0.49);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('French Pronunciation Quiz', 94, 0.85);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('French Pronunciation Quiz', 94, NULL);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Chinese Oral Exercise', 95, 0.88);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Advanced Spanish Grammar Quiz', 96, 0.75);
 INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Must-Know Korean Phrases', 97, 0.97);
@@ -411,7 +411,6 @@ INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumbe
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Korean Alphabet Quiz', 92, '12-SEP-23');
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Must-Know Korean Phrases', 97, '13-SEP-23');
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (4, 'French', 'Canadian French', 'Parisian Culture', 62, '11-SEP-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (4, 'French', 'Canadian French', 'French Pronunciation Quiz', 94, '11-SEP-23');
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Spanish Grammar Quiz', 64, '02-FEB-23');
 INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Advanced Spanish Grammar Quiz', 96, '04-FEB-23');
 
