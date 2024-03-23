@@ -104,7 +104,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<p>View average score.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="viewAvgRequest" name="viewAvgRequest">
-
 		<input type="submit" value='View' name="viewAvg"></p>
 	</form>
 	<hr />
@@ -113,6 +112,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<p>Show the number of times you scored above average.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="countScoresRequest" name="countScoresRequest">
+		<p>Input your UserID.</p>
+		UserID: <input type="text" name="userid"> <br /><br />
 		<input type="submit" value="Calculate" name="countScores"></p>
 	</form>
 	<hr />
@@ -319,8 +320,20 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	}
 
 	function countScores($result)
-	{ 
-		//TODO
+	{ //prints the number of scores for each language that's above average using nested aggregation and group by
+		echo "<table>";
+		echo "<tr>
+			<th>LanguageName</th>
+			<th>CountAboveAverage</th>
+		</tr>";
+
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			echo "<tr>
+				<td>" . $row[0] . "</td>
+				<td>" . $row[1] . "</td>
+			</tr>"; 
+		}
+		echo "</table>";
 	}
 
 	function handleDisplayExercisesRequest()
@@ -339,7 +352,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		
 		$tuple = array(
 			":bind1" => $_GET['exerciseName'],
-			":bind2" => $_GET['exerciseNum'],
+			":bind2" => $_GET['exerciseNum']
 		);
 
 		$alltuples = array(
@@ -350,6 +363,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 								   WHERE ExerciseName = :bind1
 								   AND ExerciseNumber = :bind2", $alltuples);
 		oci_commit($db_conn);
+
 		if ($result["success"] == TRUE) {
 			displayQuestion($result["statement"]);
 		} else {
@@ -363,7 +377,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			<font color=green>Yay! You completed this exercise :)</font>
 		</p>";
 
-		//TODO: Implement an update on Completes.CompletionDate
+		//TODO: Implement an update on Completes.CompletionDate?
 	}
 
 	function handleViewMaxRequest()
@@ -395,16 +409,43 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		global $db_conn;
 
 		$result = executePlainSQL("SELECT c.LanguageName, ROUND(AVG(e4.Score), 2) AS AverageScore
-								   FROM Exercise4 e4, Completes c
-								   WHERE e4.ExerciseName = c.ExerciseName 
-								   AND e4.ExerciseNumber = c.ExerciseNumber
+								   FROM Completes c
+								   LEFT JOIN Exercise4 e4
+								   ON c.ExerciseName = e4.ExerciseName AND c.ExerciseNumber = e4.ExerciseNumber
 								   GROUP BY c.LanguageName");
 		displayAvg($result["statement"]);
 	}
 
 	function handleCountScoresRequest()
 	{
-		//TODO
+		global $db_conn;
+
+		$tuple = array(
+			":bind1" => $_GET['userid']
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$result = executeBoundSQL("SELECT c.LanguageName, COUNT(DISTINCT FltrScores.Score) AS AboveAverage 
+								   FROM Completes c
+								   LEFT JOIN Exercise4 e
+								   ON c.ExerciseName = e.ExerciseName AND c.ExerciseNumber = e.ExerciseNumber
+								   LEFT JOIN (SELECT e1.Score 
+								   			  FROM Exercise4 e1
+				  							  WHERE e1.Score > (SELECT AVG(e2.Score) 
+											  					FROM Completes c2 
+																LEFT JOIN Exercise4 e2
+								   			 					ON c2.ExerciseName = e2.ExerciseName AND c2.ExerciseNumber = e2.ExerciseNumber)) FltrScores
+								   ON e.Score = FltrScores.Score
+								   WHERE UserID = :bind1
+								   GROUP BY c.LanguageName", $alltuples);
+		oci_commit($db_conn);
+
+		if ($result["success"] == TRUE) {
+			countScores($result["statement"]);
+		} 
 	}
 
 	// HANDLE ALL POST ROUTES
@@ -446,9 +487,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	} else if (isset($_GET['displayQuestion']) || isset($_GET['displayExercises']) || isset($_GET['viewMax']) || isset($_GET['viewMin']) || isset($_GET['viewAvg']) || isset($_GET['countScores'])) {
 		handleGETRequest();
 	}
-
-	// TODO: 
-	// Allow user to view the count of exercise scores for each language that are above average using nested aggregation and group by.
 
 	// End PHP parsing and send the rest of the HTML content
 	?>
