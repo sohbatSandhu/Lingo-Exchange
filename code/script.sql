@@ -439,9 +439,9 @@ INSERT INTO Achievement1(RewardID, RewardName) VALUES (54, 'Certificate of Achie
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (55, 'Badge of Honor');
 
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (41, 'Completionist', 'Complete all exercises', 54, '01-SEP-23');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (42, 'Code Master', 'Complete all coding challenges', 51, '11-FEB-20');
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (42, 'Master Speaker', 'Complete all pronunciation challenges', 51,'11-FEB-20');
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (43, 'Language Pro', 'Achieve fluency in a language', 55, '12-MAR-22');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (44, 'Fitness Guru', 'Complete all workout routines', 52, '08-NOV-21');
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (44, 'Beginner Language Guru', 'Complete Beginner Language Requirements', 52, '08-NOV-21');
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (45, 'Bookworm', 'Read 100 books', 53, '29-OCT-23'); 
 
 INSERT INTO Book(MaterialID, Author) VALUES (11, 'John Doe');
