@@ -32,7 +32,6 @@ $config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
 $config["dbpassword"] = "a12345678";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
-
 $success = true;	// keep track of errors so page redirects only if there are no errors
 
 $show_debug_alert_messages = False; // show which methods are being triggered (see debugAlertMessage())
@@ -100,8 +99,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function executePlainSQL($cmdstr)
 	{ //takes a plain (no bound variables) SQL command and executes it
 		//echo "<br>running ".$cmdstr."<br>";
-		global $db_conn, $success;
-
+		global $db_conn;
+		$response = array();
+		$response["success"] = True;
 		$statement = oci_parse($db_conn, $cmdstr);
 		//There are a set of comments at the end of the file that describe some of the OCI specific functions and how they work
 
@@ -109,19 +109,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($db_conn); // For oci_parse errors pass the connection handle
 			echo htmlentities($e['message']);
-			$success = False;
+			$response["success"] = False;
 		}
 
 		$r = oci_execute($statement, OCI_DEFAULT);
-
 		if (!$r) {
 			echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 			$e = oci_error($statement); // For oci_execute errors pass the statementhandle
 			echo htmlentities($e['message']);
-			$success = False;
+			$response["success"] = False;
 		}
 
-		return $statement;
+		$response["statement"] = $statement;
+		return $response;
 	}
 
 	function executeBoundSQL($cmdstr, $list)
@@ -131,14 +131,16 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		parsed once and you can reuse the statement. This is also very useful in protecting against SQL injection.
 		See the sample code below for how this function is used */
 
-		global $db_conn, $success;
+		global $db_conn;
+		$response = array();
+		$response["success"] = True;
 		$statement = oci_parse($db_conn, $cmdstr);
 
 		if (!$statement) {
 			echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($db_conn);
 			echo htmlentities($e['message']);
-			$success = False;
+			$response["success"] = False;
 		}
 
 		foreach ($list as $tuple) {
@@ -155,9 +157,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				$e = OCI_Error($statement); // For oci_execute errors, pass the statementhandle
 				echo htmlentities($e['message']);
 				echo "<br>";
-				$success = False;
+				$response["success"] = False;
 			}
 		}
+
+		$response["statement"] = $statement;
+		return $response;
 	}
 
 	function connectToDB()
@@ -201,8 +206,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		$checkName = $_POST['insName'];
 		$result = executePlainSQL("SELECT COUNT(UserID) FROM Learner_Consults WHERE Username = '$checkName'");
+		$row = oci_fetch_row($result["statement"]);
 
-		if ((oci_fetch_row($result)) != false) {
+		if ($row[0] > 0) {
 			echo "<p><font color=red> <b>ERROR</b>: User Name already in use. Please Select a new and unique User Name</font><p>";
 			return;
 		}
@@ -212,14 +218,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			":bind1" => time(),
 			":bind2" => $_POST['insName'],
 			":bind3" => $_POST['insAge'],
-			":bind4" => $_POST['insPassword']
+			":bind4" => $_POST['insPassword'], 
+			":bind5" => ""
 		);
 
 		$alltuples = array(
 			$tuple
 		);
 
-		executeBoundSQL("INSERT INTO Learner_Consults values (:bind1, :bind2, :bind3, :bind4, NULL)", $alltuples);
+		executeBoundSQL("INSERT INTO Learner_Consults values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
 		echo "<p><font color=green> <b>SUCCESS</b>: Account Created Successfully!</font><p>";
 		oci_commit($db_conn);
 	}
@@ -233,10 +240,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$checkUserName = $_POST['getName'];
 		// Execute SQL query to fetch the password associated with the provided username
 		$result = executePlainSQL("SELECT * FROM Learner_Consults L WHERE L.Username = '$checkUserName'");
-		$row = oci_fetch_row($result);
+		$row = oci_fetch_row($result["statement"]);
 
 		// Check if a row was fetched
-		if ($row) {
+		if (is_int($row[0]) == 1) {
 			// Password found in the database, compare it with the provided password
 			if ($row[3] == $checkPassword) {
 				session_start();
