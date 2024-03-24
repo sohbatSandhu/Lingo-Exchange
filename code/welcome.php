@@ -19,6 +19,8 @@
 // The preceding tag tells the web server to parse the following text as PHP
 // rather than HTML (the default)
 
+session_start();
+
 // The following 3 lines allow PHP errors to be displayed along with the page
 // content. Delete or comment out this block when it's no longer needed.
 ini_set('display_errors', 1);
@@ -189,7 +191,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function disconnectFromDB()
 	{
 		global $db_conn;
-
 		debugAlertMessage("Disconnect from Database");
 		oci_close($db_conn);
 	}
@@ -240,13 +241,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$checkUserName = $_POST['getName'];
 		// Execute SQL query to fetch the password associated with the provided username
 		$result = executePlainSQL("SELECT * FROM Learner_Consults L WHERE L.Username = '$checkUserName'");
-		$row = oci_fetch_row($result["statement"]);
 
 		// Check if a row was fetched
-		if (is_int($row[0]) == 1) {
+		if (($row = oci_fetch_row($result["statement"])) != false) {
 			// Password found in the database, compare it with the provided password
+			// echo $row[0] . "<br>" . $row[1] . "<br>" . $row[2] . "<br>" . $row[3] . "<br>" . $checkPassword . "<br>" . $checkUserName;
 			if ($row[3] == $checkPassword) {
-				session_start();
 				$_SESSION['userID'] = $row[0];
 				$_SESSION['userName'] = $row[1];
 				$_SESSION['age'] = $row[2];
