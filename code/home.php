@@ -62,7 +62,7 @@ $expert = $_SESSION['expert'];
 
 	<h1 style="text-align:center">Home Page: Language Learning</h1>
 	<h3 style="text-align:center">
-		Welcome <?php echo htmlspecialchars($userName); ?>, where language learning is made easy, fun, and effective. 
+		Welcome <?php global $userName; echo htmlspecialchars($userName); ?>, where language learning is made easy, fun, and effective. 
 		<br>
 		Learn, speak, connect - Unlock new Horizons. Challenge Yourself.
 	</h3>
@@ -71,7 +71,7 @@ $expert = $_SESSION['expert'];
 
 	<h2> Edit Profile </h2>
 	<p>
-		Edit Account Information <b>(UserID: <?php echo htmlspecialchars($userID); ?>)</b>
+		Edit Account Information <b>(UserID: <?php global $userID; echo htmlspecialchars($userID); ?>)</b>
 		<br>
 		Update the attributes you want to update by specifing the desired attribute value under the <b>New Information</b> column.
 		<br>
@@ -83,14 +83,27 @@ $expert = $_SESSION['expert'];
 		<input type="hidden" id="updateUserInformation" name="updateUserInformation">
 		<table>
 			<tr><th>Attribute Name</th><th>Current Information</th><th>New Information</th></tr>
-			<tr><td>User Name</td><th> <?php echo htmlspecialchars($userName); ?> </th><td><input type="text" name="newUserName"></td></tr>
-			<tr><td>Age</td><th> <?php echo htmlspecialchars($age); ?> </th><td><input type="text" name="newAge"></td></tr>
-			<tr><td>Password</td><th> <?php echo htmlspecialchars($password); ?> </th><td><input type="text" name="newPassword"></td></tr>
-			<tr><td>Expert Assigned</td><th> <?php echo htmlspecialchars($expert); ?> </th><td><input type="submit" value = "Edit Assigned Expert" name="expertPage"></td></tr>
+			<tr><td>User Name</td><th> <?php global $userName; echo htmlspecialchars($userName); ?> </th><td><input type="text" name="newUserName"></td></tr>
+			<tr><td>Age (Between 1 and 150)</td><th> <?php global $age; echo htmlspecialchars($age); ?> </th><td><input type="number" name="newAge" min="1" max="150"></td></tr>
+			<tr><td>Password</td><th> <?php global $password; echo htmlspecialchars($password); ?> </th><td><input type="text" name="newPassword"></td></tr>
+			<tr><td>Expert Assigned</td><th> <?php global $expert; echo (isset($expert)) ? htmlspecialchars($expert) : "Not Assigned"; ?> </th><td><input type="submit" value = "Edit Assigned Expert" name="expertPage"></td></tr>
 		</table>
 		<br>
 		<input type="submit" value="Update Information" name="updateUser"></p>
 	</form>
+	<form method="POST" action="welcome.php">
+		<input type="hidden" id="logout" name="logout">
+		<input type="submit" value="Logout"></p>
+	</form>
+	<hr />
+
+	<h2>Navigation</h2>
+	<p>...</p>
+	<form method="GET" action="home.php">
+		<input type="hidden" id="navTo...Request" name="navTo...Request"> 
+		<input type="submit" value="... Page"> <br /><br />
+	</form>
+
 	<hr />
 
 	<h2>View and Add Provided Languages</h2>
@@ -99,18 +112,34 @@ $expert = $_SESSION['expert'];
 		<input type="hidden" id="viewLanguageRequest" name="viewLanguageRequest"> 
 		<input type="submit" value="Show All Languages Provided"> <br /><br />
 	</form>
+
+	<hr style="border: 1px dashed gray;" />
+
+	<p>VIEW ALL PROVIDED LANGUAGE NAMES HAVING SPECIFIED MINIMUM NUMBER OF DIALECTS</p>
+	<form method="GET" action="home.php">
+		<input type="hidden" id="viewMinDialectsLanguageRequest" name="viewMinDialectsLanguageRequest">
+		Minimum Number of Dialects: <input type="number" name="minDia" min="0"> <br /><br />
+		<input type="submit" value="Show Languages"> <br /><br />
+	</form>
+
+	<hr style="border: 1px dashed gray;" />
+
 	<p>
-		INPUT LANGUAGE AND DIALET TO COMBINATION ADD LANGUAGUE INTO YOUR CURRENT LANGUAGES
+		INPUT LANGUAGE AND DIALET COMBINATION TO ADD LANGUAGUE INTO YOUR CURRENT LANGUAGES
 		<br>
 		<font color=blue><b>WARNING:</b> Languages and dialects are case sensitive. </font>
 	</p>
+	
 	<form method="POST" action="home.php">
 		<input type="hidden" id="updateLanguagesRequest" name="updateLanguagesRequest">
 		Language: <input type="text" name="addLang"> <br /><br />
 		Dialect: <input type="text" name="addDialect"> <br /><br />
 		<input type="submit" value="Add Language" name="addLanguage">
 	</form>
+	
 	<hr />
+
+	<hr style="border: 1px dashed gray;" />
 
 	<h2>View and Remove Current Languages</h2>
 	<p>VIEW ALL LANGUAGES AND DIALECT COMBINATIONS CURRENTLY LEARNING</p>
@@ -118,8 +147,11 @@ $expert = $_SESSION['expert'];
 		<input type="hidden" id="viewCurrentLanguageRequest" name="viewCurrentLanguageRequest">
 		<input type="submit" value="View Current Languages"></p>
 	</form>
+
+	<hr style="border: 1px dashed gray;" />
+	
 	<p>
-		INPUT LANGUAGE AND DIALECT TO COMBINATION REMOVE LANGUAGE FROM YOUR CURRENT LANGUAGES
+		INPUT LANGUAGE AND DIALECT COMBINATION TO REMOVE LANGUAGE FROM YOUR CURRENT LANGUAGES
 		<br>
 		<font color=blue><b>WARNING:</b> Languages and dialects are case sensitive. </font>
 	</p>
@@ -131,17 +163,6 @@ $expert = $_SESSION['expert'];
 	</form>
 
 	<hr style="border: 1px dashed gray;" />
-
-	<h2>Navigation</h2>
-	<p>...</p>
-	<form method="GET" action="home.php">
-		<input type="hidden" id="navTo...Request" name="navTo...Request"> 
-		<input type="submit" value="... Page" name="navTo..."> <br /><br />
-	</form>
-
-	<hr />
-
-
 
 	<?php
 	// The following code will be parsed as PHP
@@ -273,6 +294,25 @@ $expert = $_SESSION['expert'];
 		echo "</table>";
 	}
 
+	function printMinDialectsLanguages($result)
+	{	// prints languages with minimum number of dialects
+		echo "<br>Retrieved Languages with a Minimum of " . $_GET["minDia"] . " Dialects:<br>";
+		echo "<table>";
+		echo "<tr>
+				<th>Language Name</th>
+				<th>Number of Dialects</th>
+			</tr>";
+
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			echo "<tr>
+					<td>" . $row[0] . "</td>
+					<td>" . $row[1] . "</td>
+				</tr>";
+		}
+
+		echo "</table>";
+	}
+
 	function printSelectedLanguages($result)
 	{	// prints all selected languages
 		echo "<br>Retrieved User's Languages:<br>";
@@ -353,7 +393,7 @@ $expert = $_SESSION['expert'];
 		$result = executePlainSQL(
 			"SELECT COUNT(UserID)
 			FROM Learns
-			WHERE LanguageName = '$checkLang' AND Dialect = '$checkDial"
+			WHERE LanguageName = '$checkLang' AND Dialect = '$checkDial'"
 		);
 		$row = oci_fetch_row($result["statement"]);
 
@@ -374,6 +414,7 @@ $expert = $_SESSION['expert'];
 		);
 
 		executeBoundSQL("DELETE FROM Learns WHERE UserID=:bind1 AND LanguageName=:bind2 AND Dialect=:bind3", $alltuples);
+		echo "<p><font color=green> <b>SUCCESS</b>: Removed " . $checkLang . "Language with " . $checkDial . " dialect successfully!</font><p>";
 		oci_commit($db_conn);
 	}
 	
@@ -393,7 +434,7 @@ $expert = $_SESSION['expert'];
 		$result = executePlainSQL(
 			"SELECT COUNT(UserID) 
 			FROM Learns
-			WHERE LanguageName = '$checkLang' AND Dialect = '$checkDial'"
+			WHERE LanguageName = '$checkLang' AND Dialect = '$checkDial' AND UserID = '$userID'"
 		);
 		$row = oci_fetch_row($result["statement"]);
 
@@ -415,9 +456,24 @@ $expert = $_SESSION['expert'];
 		$alltuples = array(
 			$tuple
 		);
-
 		executeBoundSQL("INSERT INTO Learns VALUES (:bind1, :bind2, :bind3, TO_DATE(:bind4, 'YYYY-MM-DD'))", $alltuples);
+		echo "<p><font color=green> <b>SUCCESS</b>: Added " . $checkLang . "Language with " . $checkDial . " dialect successfully!</font><p>";
 		oci_commit($db_conn);
+	}
+
+	function handleDisplayMinDialectsLanguageRequest()
+	{
+		global $db_conn;
+
+		$minNum = $_GET["minDia"];
+
+		$result = executePlainSQL(
+			"SELECT LanguageName, COUNT(Dialect)
+			FROM Language2
+			GROUP BY LanguageName 
+			HAVING COUNT(Dialect) > '$minNum'"
+		);
+		printMinDialectsLanguages($result["statement"]);
 	}
 	
 	function handleDisplayCurrentLanguageRequest()
@@ -431,11 +487,12 @@ $expert = $_SESSION['expert'];
 			WHERE UserID = '$userID'"
 		);
 
-		// if ($result["success"] == true) {
+		// TODO: Make appropriate empty table error handling
+		if ($result["success"] == true) {
 			printSelectedLanguages($result["statement"]);
-		// } else {
-		// 	echo "<p><font color=red> <b>ERROR</b>: No Currently Selected Languages. Retry after selecting languages</font><p>";
-		// }
+		} else {
+			echo "<p><font color=red> <b>ERROR</b>: No Currently Selected Languages. Retry after selecting languages</font><p>";
+		}
 		
 	}
 
@@ -475,6 +532,8 @@ $expert = $_SESSION['expert'];
 				handleDisplayAllLanguageRequest();
 			} elseif (array_key_exists('viewCurrentLanguageRequest', $_GET)) {
 				handleDisplayCurrentLanguageRequest();
+			} elseif (array_key_exists('viewMinDialectsLanguageRequest', $_GET)) {
+				handleDisplayMinDialectsLanguageRequest();
 			}
 
 			disconnectFromDB();
@@ -483,7 +542,7 @@ $expert = $_SESSION['expert'];
 
 	if (isset($_POST['updateUser']) || isset($_POST['addLanguage']) || isset($_POST['removeLanguage'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest'])) {
+	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest'])) {
 		handleGETRequest();
 	}
 
