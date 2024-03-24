@@ -188,7 +188,6 @@ CREATE TABLE Achievement2(
 	AchievementName 	   VARCHAR(50),
 	AchievementDescription VARCHAR(50),
 	RewardID 			   INTEGER,
-	ReceivalDate		   DATE,
 	FOREIGN KEY (RewardID) REFERENCES Achievement1
 		ON DELETE CASCADE
 );
@@ -438,11 +437,11 @@ INSERT INTO Achievement1(RewardID, RewardName) VALUES (53, 'Bronze Medal');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (54, 'Certificate of Achievement');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (55, 'Badge of Honor');
 
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (41, 'Completionist', 'Complete all exercises', 54, '01-SEP-23');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (42, 'Master Speaker', 'Complete all pronunciation challenges', 51,'11-FEB-20');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (43, 'Language Pro', 'Achieve fluency in a language', 55, '12-MAR-22');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (44, 'Beginner Language Guru', 'Complete Beginner Language Requirements', 52, '08-NOV-21');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (45, 'Bookworm', 'Read 100 books', 53, '29-OCT-23'); 
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (41, 'Completionist', 'Complete all exercises', 54);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (42, 'Master Speaker', 'Complete all pronunciation challenges', 51);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (43, 'Language Pro', 'Achieve fluency in a language', 55);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (44, 'Beginner Language Guru', 'Complete Beginner Language Requirements', 52);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (45, 'Bookworm', 'Read 100 books', 53); 
 
 INSERT INTO Book(MaterialID, Author) VALUES (11, 'John Doe');
 INSERT INTO Book(MaterialID, Author) VALUES (12, 'Gabriel Martinez');
@@ -496,12 +495,12 @@ INSERT INTO Participates(UserID, URL) VALUES (2, 'http://example.com/french-in-c
 INSERT INTO Participates(UserID, URL) VALUES (3, 'http://example.com/french-in-canada');
 INSERT INTO Participates(UserID, URL) VALUES (4, 'http://example.com/language-learning-book-club'); 
 
-INSERT INTO Earns(UserID, AchievementID) VALUES (1, 41);
-INSERT INTO Earns(UserID, AchievementID) VALUES (2, 42);
-INSERT INTO Earns(UserID, AchievementID) VALUES (2, 43);
-INSERT INTO Earns(UserID, AchievementID) VALUES (4, 44);
-INSERT INTO Earns(UserID, AchievementID) VALUES (5, 44);
-INSERT INTO Earns(UserID, AchievementID) VALUES (5, 45); 
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (1, 41, '01-SEP-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 42, '11-FEB-20');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 43, '12-MAR-22');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (4, 44, '08-NOV-21');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 44, '08-NOV-21');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 45, '29-OCT-23'); 
 
 
 ------------------------------
