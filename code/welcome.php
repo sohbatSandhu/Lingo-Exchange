@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
+$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 
@@ -49,7 +49,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 <body>
 
-	<h1>Welcome to Language Learning Platform</h1>
+	<h1 style="text-align:center">Welcome to Language Learning Platform</h1>
 	<!-- // TODO: COMPLETE SUMMARY-->
 	<p>TODO : Give summary of the project ... </p>
 
@@ -69,9 +69,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
 	<h2>Login</h2>
-	<p>SIGN IN TO CONTINUE TO YOUR LANGUAGE LEARNING JOURNEY: HOME PAGE</p>
-	<p> (The values are case sensitive and if you enter in the wrong case, access will be denied)</p>
-	<form method="GET" action="welcome.php">
+	<p>
+		SIGN IN TO CONTINUE TO YOUR LANGUAGE LEARNING JOURNEY: HOME Page
+		<br>
+		<font color=blue><b>WARNING:</b> The values are case sensitive and if you enter in the wrong case, access will be denied </font>
+	</p>
+
+	<form method="POST" action="welcome.php">
 		<input type="hidden" id="accessAccountRequest" name="accessAccountRequest">
 		User Name: <input type="text" name="getName"> <br /><br />
 		Password: <input type="text" name="getPassword"> <br /><br />
@@ -156,19 +160,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-	function printResult($result)
-	{ //prints results from a select statement
-		echo "<br>Retrieved data from table demoTable:<br>";
-		echo "<table>";
-		echo "<tr><th>ID</th><th>Name</th></tr>";
-
-		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-		}
-
-		echo "</table>";
-	}
-
 	function connectToDB()
 	{
 		global $db_conn;
@@ -209,10 +200,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 
 		$checkName = $_POST['insName'];
-		$result = executePlainSQL("SELECT COUNT(UserID) FROM Learner_Consults WHERE userName = '$checkName'");
-		$row = oci_fetch_row($result);
+		$result = executePlainSQL("SELECT COUNT(UserID) FROM Learner_Consults WHERE Username = '$checkName'");
 
-		if ($row[0] > 0) {
+		if ((oci_fetch_row($result)) != false) {
 			echo "<p><font color=red> <b>ERROR</b>: User Name already in use. Please Select a new and unique User Name</font><p>";
 			return;
 		}
@@ -230,7 +220,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		);
 
 		executeBoundSQL("INSERT INTO Learner_Consults values (:bind1, :bind2, :bind3, :bind4, NULL)", $alltuples);
-		echo "<p><font color=blue> <b>SUCCESS</b>: Account Created Successfully!!</font><p>";
+		echo "<p><font color=green> <b>SUCCESS</b>: Account Created Successfully!</font><p>";
 		oci_commit($db_conn);
 	}
 
@@ -239,17 +229,24 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		global $db_conn;
 
 		// Checking uniqueness of the User name
-		$checkPassword = $_GET['getPassword'];
-		$checkUserName = $_GET['getName'];
+		$checkPassword = $_POST['getPassword'];
+		$checkUserName = $_POST['getName'];
 		// Execute SQL query to fetch the password associated with the provided username
-		$result = executePlainSQL("SELECT * FROM Learner_Consults L WHERE L.userName = '$checkUserName'");
+		$result = executePlainSQL("SELECT * FROM Learner_Consults L WHERE L.Username = '$checkUserName'");
 		$row = oci_fetch_row($result);
 
 		// Check if a row was fetched
 		if ($row) {
 			// Password found in the database, compare it with the provided password
 			if ($row[3] == $checkPassword) {
-				header("Location: home.php"); // Redirect user to home page
+				session_start();
+				$_SESSION['userID'] = $row[0];
+				$_SESSION['userName'] = $row[1];
+				$_SESSION['age'] = $row[2];
+				$_SESSION['password'] = $row[3];
+				$_SESSION['expert'] = $row[4];
+
+				header('Location: home.php'); // Redirect user to home page
 				exit; // Stop further execution
 			} else {
 				echo "<p><font color=red> <b>ERROR</b>: Incorrect password</font><p>";
@@ -257,7 +254,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		} else {
 			echo "<p><font color=red> <b>ERROR</b>: User not found</font><p>";
 		}
-
 	}
 
 	// HANDLE ALL POST ROUTES
@@ -266,17 +262,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		if (connectToDB()) {
 			if (array_key_exists('insertQueryRequest', $_POST)) {
 				handleInsertRequest();
-			}
-
-			disconnectFromDB();
-		}
-	}
-
-	// HANDLE ALL GET ROUTES
-	function handleGETRequest()
-	{
-		if (connectToDB()) {
-			if (array_key_exists('accessAccountRequest', $_GET)) {
+				// TODO: Achievement UPDATES
+			} else if (array_key_exists('accessAccountRequest', $_POST)) {
 				handleAccessRequest();
 			}
 
@@ -284,10 +271,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-	if (isset($_POST['insertSubmit'])) {
+	if (isset($_POST['insertSubmit']) || isset($_POST['getLogin'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['getLogin'])) {
-		handleGETRequest();
 	}
 
 	// End PHP parsing and send the rest of the HTML content
