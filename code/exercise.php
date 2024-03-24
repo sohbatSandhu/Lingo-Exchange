@@ -84,7 +84,47 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<h2>Mark Complete</h2>
 	<form method="POST" action="exercise.php">
 		<input type="hidden" id="markCompleteRequest" name="markCompleteRequest">
-		<p><input type="submit" value="Mark Complete" name="markCompleted"></p>
+		<p>Input your userID.</p>
+		UserID: <input type="text" name="userid"> <br /><br />
+
+		<p>Choose exercise.</p>
+		<p><select id="exerciseName" name="exerciseName">
+			<option value="Active to Passive Voice English">Active to Passive Voice English</option>
+			<option value="Parisian Culture">Parisian Culture</option>
+			<option value="Chinese Vocabulary Quiz">Chinese Vocabulary Quiz</option>
+			<option value="Spanish Grammar Quiz">Spanish Grammar Quiz</option>
+			<option value="German Pronunciation Workout">German Pronunciation Workout</option>
+			<option value="Korean Alphabet Quiz">Korean Alphabet Quiz</option>
+			<option value="Mock Spelling Bee">Mock Spelling Bee</option>
+			<option value="French Pronunciation Quiz">French Pronunciation Quiz</option>
+			<option value="Chinese Oral Exercise">Chinese Oral Exercise</option>
+			<option value="Advanced Spanish Grammar Quiz">Advanced Spanish Grammar Quiz</option>
+			<option value="Must-Know Korean Phrases">Must-Know Korean Phrases</option>
+		</select></p>
+
+		<p><select id="exerciseNum" name="exerciseNum">
+			<option value="61">61</option>
+			<option value="62">62</option>
+			<option value="63">63</option>
+			<option value="64">64</option>
+			<option value="65">65</option>
+			<option value="92">92</option>
+			<option value="93">93</option>
+			<option value="94">94</option>
+			<option value="95">95</option>
+			<option value="96">96</option>
+			<option value="97">97</option>
+		</select></p>
+		<p><input type="submit" value="Mark Complete" name="markComplete"></p>
+	</form>
+	<hr />
+
+	<h2>View Completed Exercises</h2>
+	<form method="GET" action="exercise.php">
+		<input type="hidden" id="displayCompletedRequest" name="displayCompletedRequest">
+		<p>Input your userID.</p>
+		UserID: <input type="text" name="userid"> <br /><br />
+		<p><input type="submit" value="See Completed" name="displayCompleted"></p>
 	</form>
 	<hr />
 
@@ -265,6 +305,26 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		//TODO: add error handling for empty tables
 	}
 
+	function displayCompleted($result) 
+	{ //prints completed exercises for a user from a select statement
+		echo "<br>Completed Exercises<br>";
+		echo "<table>";
+		echo "<tr>
+			<th>ExerciseName</th>
+			<th>ExerciseNumber</th>
+			<th>CompletionDate</th>
+		</tr>";
+
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			echo "<tr>
+				<td>" . $row[0] . "</td>
+				<td>" . $row[1] . "</td>
+				<td>" . $row[2] . "</td>
+			</tr>"; 
+		}
+		echo "</table>";
+	}
+
 	function displayMax($result)
 	{ //prints the maximum score for each language using aggregation and group by
 		echo "<br>Maximum Scores<br>";
@@ -373,14 +433,56 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function handleMarkCompletedRequest()
 	{
-		echo "<p>
-			<font color=green>Yay! You completed this exercise :)</font>
-		</p>";
+		global $db_conn;
+		
+		$currDate = date('d-M-Y');
 
-		//TODO: Implement an update on Completes.CompletionDate?
+		$tuple = array(
+			":bind1" => $currDate, 
+			":bind2" => $_POST['userid'],
+			":bind3" => $_POST['exerciseName'],
+			":bind4" => $_POST['exerciseNum']
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$result = executeBoundSQL("UPDATE Completes SET CompletionDate = :bind1
+								   WHERE UserID = :bind2 AND ExerciseName = :bind3 AND ExerciseNumber = :bind4", $alltuples);
+		oci_commit($db_conn);
+
+		if ($result["success"] == TRUE) {
+			echo "<p><font color=green> Yay! Completed an exercise :)</font></p>";
+		} else {
+			echo "<p><font color=red>Try again :(</font><p>";
+		}
 	}
 
-	function handleViewMaxRequest()
+	function handleDisplayCompletedRequest()
+	{
+		global $db_conn;
+		
+		$tuple = array(
+			":bind1" => $_GET['userid']
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$result = executeBoundSQL("SELECT ExerciseName, ExerciseNumber, CompletionDate FROM Completes
+								   WHERE UserID = :bind1", $alltuples);
+		oci_commit($db_conn);
+
+		if ($result["success"] == TRUE) {
+			displayCompleted($result["statement"]);
+		} else {
+			echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the userID is correct</font><p>";
+		}
+	}
+
+	function handleDisplayMaxRequest()
 	{
 		global $db_conn;
 
@@ -392,7 +494,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		displayMax($result["statement"]);
 	}
 
-	function handleViewMinRequest()
+	function handleDisplayMinRequest()
 	{
 		global $db_conn;
 
@@ -404,7 +506,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		displayMin($result["statement"]);
 	}
 
-	function handleViewAvgRequest()
+	function handleDisplayAvgRequest()
 	{
 		global $db_conn;
 
@@ -453,7 +555,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handlePOSTRequest()
 	{
 		if (connectToDB()) {
-			if (array_key_exists('markCompleted', $_POST)) {
+			if (array_key_exists('markCompleteRequest', $_POST)) {
 				handleMarkCompletedRequest();
 			}
 			disconnectFromDB();
@@ -470,21 +572,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			} else if (array_key_exists('displayExercisesRequest', $_GET)) {
 				handleDisplayExercisesRequest();
 			} else if (array_key_exists('viewMaxRequest', $_GET)) {
-				handleViewMaxRequest();
+				handleDisplayMaxRequest();
 			} else if (array_key_exists('viewMinRequest', $_GET)) {
-				handleViewMinRequest();
+				handleDisplayMinRequest();
 			} else if (array_key_exists('viewAvgRequest', $_GET)) {
-				handleViewAvgRequest();
+				handleDisplayAvgRequest();
 			} else if (array_key_exists('countScoresRequest', $_GET)) {
 				handleCountScoresRequest();
-			} 
+			} else if (array_key_exists('displayCompletedRequest', $_GET)) {
+				handleDisplayCompletedRequest();
+			}
 			disconnectFromDB();
 		}
 	}
 
-	if (isset($_POST['markCompletedRequest'])) {
+	if (isset($_POST['markComplete'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displayQuestion']) || isset($_GET['displayExercises']) || isset($_GET['viewMax']) || isset($_GET['viewMin']) || isset($_GET['viewAvg']) || isset($_GET['countScores'])) {
+	} else if (isset($_GET['displayQuestion']) || isset($_GET['displayExercises']) || isset($_GET['viewMax']) || isset($_GET['viewMin']) || isset($_GET['viewAvg']) || isset($_GET['countScores']) || isset($_GET['displayCompleted'])) {
 		handleGETRequest();
 	}
 
