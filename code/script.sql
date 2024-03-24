@@ -387,12 +387,12 @@ INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VAL
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'Chinese', 'Mandarin', 2);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'Korean', 'Gyeonggi Dialect', 2);
 
-INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (1, 'Korean', 'Gyeonggi Dialect', '01-SEP-23');
-INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (2, 'Chinese', 'Mandarin', '21-SEP-23');
-INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (3, 'English', 'American English', '12-OCT-23');
-INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (4, 'French', 'Canadian French', '10-APR-23');
-INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (5, 'Spanish', 'Latin American Spanish', '22-NOV-22');
-INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (6, 'German', 'Swiss German', '11-DEC-23');
+INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (1, 'Korean', 'Gyeonggi Dialect', '2023-01-09');
+INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (2, 'Chinese', 'Mandarin', '2023-21-09');
+INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (3, 'English', 'American English', '2023-12-10');
+INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (4, 'French', 'Canadian French', '2023-10-04');
+INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (5, 'Spanish', 'Latin American Spanish', '2022-22-11');
+INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (6, 'German', 'Swiss German', '2023-11-12');
 
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (1, 'Korean', 'Gyeonggi Dialect', 35);
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (2, 'Chinese', 'Mandarin', 14);
@@ -401,18 +401,18 @@ INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (4, 'French',
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (5, 'Spanish', 'Latin American Spanish', 31);
 INSERT INTO Uses(UserID, LanguageName, Dialect, MaterialID) VALUES (6, 'German', 'Swiss German', 15);
 
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (1, 'German', 'Swiss German', 'German Pronunciation Workout', 65, '01-OCT-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Chinese', 'Mandarin', 'Chinese Vocabulary Quiz', 63, '13-OCT-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Chinese', 'Mandarin', 'Chinese Oral Exercise', 95, '13-OCT-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Korean', 'Gyeonggi Dialect', 'Must-Know Korean Phrases', 97, '01-SEP-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'English', 'American English', 'Active to Passive Voice English', 61, '04-DEC-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'English', 'American English', 'Mock Spelling Bee', 93, '09-NOV-22');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'English', 'American English', 'Active to Passive Voice English', 61, '09-NOV-22');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Korean Alphabet Quiz', 92, '12-SEP-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Must-Know Korean Phrases', 97, '13-SEP-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (4, 'French', 'Canadian French', 'Parisian Culture', 62, '11-SEP-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Spanish Grammar Quiz', 64, '02-FEB-23');
-INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Advanced Spanish Grammar Quiz', 96, '04-FEB-23');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (1, 'German', 'Swiss German', 'German Pronunciation Workout', 65, '2023-01-10');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Chinese', 'Mandarin', 'Chinese Vocabulary Quiz', 63, '2023-13-10');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Chinese', 'Mandarin', 'Chinese Oral Exercise', 95, '2023-13-10');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'Korean', 'Gyeonggi Dialect', 'Must-Know Korean Phrases', 97, '2023-01-09');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (2, 'English', 'American English', 'Active to Passive Voice English', 61, '2023-04-12');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'English', 'American English', 'Mock Spelling Bee', 93, '2022-09-11');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'English', 'American English', 'Active to Passive Voice English', 61, '2022-09-11');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Korean Alphabet Quiz', 92, '2023-12-09');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (3, 'Korean', 'Gyeonggi Dialect', 'Must-Know Korean Phrases', 97, '2023-13-09');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (4, 'French', 'Canadian French', 'Parisian Culture', 62, '2023-11-09');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Spanish Grammar Quiz', 64, '2023-02-02');
+INSERT INTO Completes(UserID, LanguageName, Dialect, ExerciseName, ExerciseNumber, CompletionDate) VALUES (5, 'Spanish', 'Latin American Spanish', 'Advanced Spanish Grammar Quiz', 96, '2023-04-02');
 
 INSERT INTO Forum1(Title, Purpose) VALUES ('General Discussion', 'Discuss various topics');
 INSERT INTO Forum1(Title, Purpose) VALUES ('Beginner Mandarin Chinese', 'Get help with Beginner Mandarin');
@@ -438,11 +438,11 @@ INSERT INTO Achievement1(RewardID, RewardName) VALUES (53, 'Bronze Medal');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (54, 'Certificate of Achievement');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (55, 'Badge of Honor');
 
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (41, 'Completionist', 'Complete all exercises', 54, '01-SEP-23');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (42, 'Code Master', 'Complete all coding challenges', 51, '11-FEB-20');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (43, 'Language Pro', 'Achieve fluency in a language', 55, '12-MAR-22');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (44, 'Fitness Guru', 'Complete all workout routines', 52, '08-NOV-21');
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (45, 'Bookworm', 'Read 100 books', 53, '29-OCT-23'); 
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (41, 'Completionist', 'Complete all exercises', 54, '2023-01-09');
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (42, 'Code Master', 'Complete all coding challenges', 51, '2020-11-02');
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (43, 'Language Pro', 'Achieve fluency in a language', 55, '2022-12-03');
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (44, 'Fitness Guru', 'Complete all workout routines', 52, '2021-08-11');
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID, ReceivalDate) VALUES (45, 'Bookworm', 'Read 100 books', 53, '2023-29-10'); 
 
 INSERT INTO Book(MaterialID, Author) VALUES (11, 'John Doe');
 INSERT INTO Book(MaterialID, Author) VALUES (12, 'Gabriel Martinez');
@@ -468,11 +468,11 @@ INSERT INTO Bot_Monitors1(BotName, Purpose) VALUES ('AnalyticsBot', 'Analyze use
 INSERT INTO Bot_Monitors1(BotName, Purpose) VALUES ('SecurityBot', 'Monitor security threats');
 INSERT INTO Bot_Monitors1(BotName, Purpose) VALUES ('FeedbackBot', 'Collect user feedback'); 
 
-INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('SpamGuardBot', 'TechzCorp', '11-SEP-23');
-INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('AutoResponderBot', 'TechzCorp', '21-JAN-20');
-INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('AnalyticsBot', 'DataInsightsAnswers', '11-SEP-22');
-INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('SecurityBot', 'CyberSafeSols', '19-OCT-23');
-INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('FeedbackBot', 'UserInsights4All', '18-NOV-21'); 
+INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('SpamGuardBot', 'TechzCorp', '2023-11-09');
+INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('AutoResponderBot', 'TechzCorp', '2020-21-01');
+INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('AnalyticsBot', 'DataInsightsAnswers', '2022-11-09');
+INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('SecurityBot', 'CyberSafeSols', '2023-19-10');
+INSERT INTO Bot_Monitors3(BotName, Creator, CreationDate) VALUES ('FeedbackBot', 'UserInsights4All', '2021-18-11'); 
 
 INSERT INTO Bot_Monitors4(BotName, Version, Creator, URL) VALUES ('SpamGuardBot', 'v1.0', 'TechzCorp', 'http://example.com/general-discussion');
 INSERT INTO Bot_Monitors4(BotName, Version, Creator, URL) VALUES ('AutoResponderBot', 'v2.0', 'TechzCorp', 'http://example.com/beginner-mandarin-chinese');
