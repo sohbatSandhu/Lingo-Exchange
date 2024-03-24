@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 
 // Set some parameters
 // Database access configuration
-$config["dbuser"] = "ora_cwl";	// change "cwl" to your own CWL !!!!!!
-$config["dbpassword"] = "aSID";	// change to 'a' + your student number !!!!!
+$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
+$config["dbpassword"] = "pass";			// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -48,25 +48,25 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     th {text-align: center}
 </style>
 <body>
-	<h1 style="text-align:center">Projection Page</h1>
+	<h1 style="text-align:center">Admin Page</h1>
     <h2>View Tables & Attributes</h2>
-	<p>View all the tables in our database (for the current user).</p>
-	<form method="GET" action="projection.php">
+	<p>View all the tables in the database.</p>
+	<form method="GET" action="admin.php">
 		<input type="hidden" id="viewTablesGetRequest" name="viewTablesGetRequest">
 		<input type="submit" value="View Tables" name="viewTables"></p>
 	</form>
 	<hr style="border: 1px dashed gray;" />
-    <p>View all the attributes for a specific table in our database (for the current user).</p>
-	<form method="GET" action="projection.php">
+    <p>View all the attributes for a specific table in the database.</p>
+	<form method="GET" action="admin.php">
 		<input type="hidden" id="viewAttributesGetRequest" name="viewAttributesGetRequest">
 		Table Name: <input type="text" name="table"> <br /><br />
 		<input type="submit" value="View Attributes" name="viewAttributes"></p>
 	</form>
     <hr />
     <h2>Project Attributes</h2>
-    <p>Project the specified attributes for a specific table in our database (for the current user).<br>
+    <p>Project the specified attributes for a specific table in the database.<br>
        Please provide the desired attribute names as a <b>comma-separated list</b>.<br></p>
-	<form method="GET" action="projection.php">
+	<form method="GET" action="admin.php">
 		<input type="hidden" id="projectionGetRequest" name="projectionGetRequest">
 		Table Name: <input type="text" name="table"> <br /><br />
         Attributes: <input type="text" name="attributes"> <br /><br />
