@@ -28,7 +28,7 @@ error_reporting(E_ALL);
 // Set some parameters
 // Database access configuration
 $config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "pass";			// change to 'a' + your student number
+$config["dbpassword"] = "pass";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -49,6 +49,52 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </style>
 <body>
 	<h1 style="text-align:center">Admin Page</h1>
+	As an admin, you will be able to view and update the Achievements offered across the Lingo Exchange system.
+	You will also be able to view all the tables and attributes stored in the Lingo Exchange database.
+	<hr />
+	<h2>View Achievements</h2>
+	<p>View all the tuples in the Achievement1 table.</p>
+	<form method="GET" action="admin.php">
+		<input type="hidden" id="viewAchievement1GetRequest" name="viewAchievement1GetRequest">
+		<input type="submit" value="View Achievement1" name="viewAchievement1"></p>
+	</form>
+	<hr style="border: 1px dashed gray;" />
+	<p>View all the tuples in the Achievement2 table.</p>
+	<form method="GET" action="admin.php">
+		<input type="hidden" id="viewAchievement2GetRequest" name="viewAchievement2GetRequest">
+		<input type="submit" value="View Achievement2" name="viewAchievement2"></p>
+	</form>
+	<hr />
+	<h2>Update Achievements</h2>
+	<p>
+		Update the achievements offered across the Lingo Exchange system by updating the attributes of tuples in Achievement2.
+		<br>
+		Specify the AchievementID of the tuple you'd like updated and then specify the updated attribute values for that tuple.
+	</p>
+	<form method="POST" action="admin.php">
+		<input type="hidden" id="updateAchievementPostRequest" name="updateAchievementPostRequest">
+		Achievement ID: <input type="text" name="id"> <br /><br />
+		<table>
+			<tr><th>Attribute Name</th><th>Updated Attribute Value</th></tr>
+			<tr><td>AchievementName</td><td><input type="text" name="name"></td></tr>
+			<tr><td>AchievementDescription</td><td><input type="text" name="description"></td></tr>
+			<tr>
+				<td>RewardID</td>
+				<td>
+				<select id="reward" name="reward">
+					<option value="51">51 (Gold Medal)</option>
+					<option value="52">52 (Silver Medal)</option>
+					<option value="53">53 (Bronze Medal)</option>
+					<option value="54'">54 (Certificate of Achievement)</option>
+					<option value="55">55 (Badge of Honor)</option>
+				</select>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<input type="submit" value="Update Achievement" name="updateAchievement"></p>
+	</form>
+	<hr />
     <h2>View Tables & Attributes</h2>
 	<p>View all the tables in the database.</p>
 	<form method="GET" action="admin.php">
@@ -210,6 +256,46 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "</table>";
 	}
 
+	function printViewAchievement1($result)
+	{ //prints results from a select statement
+		echo "<br>Results for viewing Achievement1:<br><br>";
+		echo "<table>";
+		echo "<tr>
+				<th>RewardID</th>
+				<th>RewardName</th>
+			 </tr>";
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			// echo <tr> $row[0]  <tr>;
+			 echo "<tr>
+			 			<td>" . $row[0] . "</td>
+						<td>" . $row[1] . "</td>
+				   </tr>";
+		}
+		echo "</table>";
+	}
+
+	function printViewAchievement2($result)
+	{ //prints results from a select statement
+		echo "<br>Results for viewing Achievement2:<br><br>";
+		echo "<table>";
+		echo "<tr>
+				<th>AchievementID</th>
+				<th>AchievementName</th>
+				<th>AchievementDescription</th>
+				<th>RewardID</th>
+			 </tr>";
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			// echo <tr> $row[0]  <tr>;
+			 echo "<tr>
+			 			<td>" . $row[0] . "</td>
+						<td>" . $row[1] . "</td>
+						<td>" . $row[2] . "</td>
+						<td>" . $row[3] . "</td>
+				   </tr>";
+		}
+		echo "</table>";
+	}
+
     function printProjectAttributes($result, $attributes, $count)
 	{ //prints results from a select statement
 		echo "<br>Results for projecting specified attributes of a specified table:<br><br>";
@@ -262,10 +348,23 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
+	function handleViewAchievement1GetRequest()
+	{
+		global $db_conn;
+		$result = executePlainSQL("SELECT * FROM Achievement1");
+		printViewAchievement1($result["statement"]);
+	}
+
+	function handleViewAchievement2GetRequest()
+	{
+		global $db_conn;
+		$result = executePlainSQL("SELECT * FROM Achievement2");
+		printViewAchievement2($result["statement"]);
+	}
+
     function handleProjectAttributesGetRequest()
 	{
 		global $db_conn;
-
         
         $table = $_GET['table'];
         $attributes = $_GET['attributes'];
@@ -283,6 +382,63 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
+	function handleRequestUpdateAchievementRequest()
+	{
+		global $db_conn;
+		$first = 1;
+		$tuple = array();
+		$query = "UPDATE Achievement2 SET";	
+		if (!empty($_POST["name"]) && $first==1) {
+			$query .= " AchievementName=:bind1";
+			$tuple[':bind1'] = $_POST["name"];
+			$first = 0;
+		} elseif(!empty($_POST["name"])) {
+			$query .= ", AchievementName=:bind1";
+			$tuple[':bind1'] = $_POST["name"];
+		}
+		if (!empty($_POST["description"]) && $first==1) {
+			$query .= " AchievementDescription=:bind2";
+			$tuple[':bind2'] = $_POST["description"];
+			$first = 0;
+		} elseif(!empty($_POST["description"])) {
+			$query .= ", AchievementDescription=:bind2";
+			$tuple[':bind2'] = $_POST["description"];
+		}
+		if (!empty($_POST["reward"]) && $first==1) {
+			$query .= " RewardID=:bind3";
+			$tuple[':bind3'] = $_POST["reward"];
+			$first = 0;
+		} elseif(!empty($_POST["reward"])) {
+			$query .= ", RewardID=:bind3";
+			$tuple[':bind3'] = $_POST["reward"];
+		}
+		$tuple[':bind4'] = $_POST["id"];
+		$query .= " WHERE AchievementID=:bind4";
+		$alltuples = array($tuple);
+		$result = executeBoundSQL($query, $alltuples);
+		oci_commit($db_conn);		
+		if ($result["success"] == TRUE) {
+			echo "<p><font color=green> <b>SUCCESS</b>: The attributes of the specified achievement have been updated in Achievement2 :) </font><p>";
+		}
+		if ($result["success"] == FALSE) {
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to update the specified achievement :( </font><p>";
+		}
+
+	}
+
+	// HANDLE ALL POST ROUTES
+	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
+	function handlePOSTRequest()
+	{
+		if (connectToDB()) {
+			if (array_key_exists('updateAchievementPostRequest', $_POST)) {
+				handleRequestUpdateAchievementRequest();
+			}
+			disconnectFromDB();
+		}
+	}
+
+
 	// HANDLE ALL GET ROUTES
 	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
 	function handleGETRequest()
@@ -294,12 +450,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				handleViewAttributesGetRequest();
             } elseif (array_key_exists('projectAttributes', $_GET)) {
 				handleProjectAttributesGetRequest();
+            } elseif (array_key_exists('viewAchievement1', $_GET)) {
+				handleViewAchievement1GetRequest();
+            } elseif (array_key_exists('viewAchievement2', $_GET)) {
+				handleViewAchievement2GetRequest();
             }
 			disconnectFromDB();
 		}
 	}
 
-	if (isset($_GET['viewTablesGetRequest']) || isset($_GET['viewAttributesGetRequest']) || isset($_GET['projectionGetRequest'])) {
+	if (isset($_POST['updateAchievement'])) {
+		handlePOSTRequest();
+	} elseif (isset($_GET['viewTablesGetRequest']) || isset($_GET['viewAttributesGetRequest']) || isset($_GET['projectionGetRequest'])
+		|| isset($_GET['viewAchievement1GetRequest']) || isset($_GET['viewAchievement2GetRequest'])) {
 		handleGETRequest();
 	} 
 	// End PHP parsing and send the rest of the HTML content
