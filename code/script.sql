@@ -285,6 +285,7 @@ INSERT INTO Expert3(ExpertName, City, DeliveryMode) VALUES ('Sohbat S', 'Vancouv
 INSERT INTO Expert3(ExpertName, City, DeliveryMode) VALUES ('James W', 'Toronto', 'Online Morning');
 INSERT INTO Expert3(ExpertName, City, DeliveryMode) VALUES ('Kayla K', 'Toronto', 'Online Morning');
 INSERT INTO Expert3(ExpertName, City, DeliveryMode) VALUES ('Kate M', 'Edmonton', 'In-Person Afternoon');
+INSERT INTO Expert3(ExpertName, City, DeliveryMode) VALUES ('Anita M', 'Seattle', 'Online Evening');
 
 INSERT INTO Expert4(ExpertEmail, ExpertName, City) VALUES ('romina.m@mail.com', 'Romina M', 'Vancouver');
 INSERT INTO Expert4(ExpertEmail, ExpertName, City) VALUES ('annie.w@mail.com', 'Annie W', 'Vancouver');
@@ -292,6 +293,7 @@ INSERT INTO Expert4(ExpertEmail, ExpertName, City) VALUES ('sohbat.s@mail.com', 
 INSERT INTO Expert4(ExpertEmail, ExpertName, City) VALUES ('james.w@mail.com', 'James W', 'Toronto');
 INSERT INTO Expert4(ExpertEmail, ExpertName, City) VALUES ('kayla.k@mail.com', 'Kayla K', 'Toronto');
 INSERT INTO Expert4(ExpertEmail, ExpertName, City) VALUES ('kate.m@mail.com', 'Kate M', 'Edmonton');
+INSERT INTO Expert4(ExpertEmail, ExpertName, City) VALUES ('anita.m@mail.com', 'Anita M', 'Seattle');
 
 INSERT INTO Language1(LanguageName, NumChars) VALUES ('English', 26);
 INSERT INTO Language1(LanguageName, NumChars) VALUES ('Spanish', 27);
@@ -385,6 +387,12 @@ INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VAL
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'German', 'Swiss German', 3);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'Chinese', 'Mandarin', 2);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('kate.m@mail.com', 'Korean', 'Gyeonggi Dialect', 2);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('anita.m@mail.com', 'English', 'American English', 5);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('anita.m@mail.com', 'Spanish', 'European Spanish', 5);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('anita.m@mail.com', 'French', 'Belgian French', 5);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('anita.m@mail.com', 'German', 'Swiss German', 3);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('anita.m@mail.com', 'Chinese', 'Mandarin', 2);
+INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('anita.m@mail.com', 'Korean', 'Gyeonggi Dialect', 2);
 
 INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (1, 'Korean', 'Gyeonggi Dialect', '01-SEP-23');
 INSERT INTO Learns(UserID, LanguageName, Dialect, StartDate) VALUES (2, 'Chinese', 'Mandarin', '21-SEP-23');
