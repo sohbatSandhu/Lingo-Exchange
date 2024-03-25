@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 
 // Set some parameters
 // Database access configuration
-$config["dbuser"] = "ora_cwl";	// change "cwl" to your own CWL !!!!!!
-$config["dbpassword"] = "aSID";	// change to 'a' + your student number !!!!!
+$config["dbuser"] = "ora_cwl";		// change "cwl" to your own CWL
+$config["dbpassword"] = "pass";		// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -96,7 +96,15 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		<table>
 			<tr><th>Attribute Name</th><th>Attribute Value</th></tr>
 			<tr><td>URL</td><td><input type="text" name="url"></td></tr>
-			<tr><td>Status</td><td><input type="text" name="status"></td></tr>
+			<tr>
+				<td>Status</td>
+				<td>
+					<select id="status" name="status">
+						<option value="Active">Active</option>
+						<option value="Inactive">Inactive</option>
+					</select>
+				</td>
+			</tr>
 			<tr><td>Title</td><td><input type="text" name="title"></td></tr>
 		</table>
 		<br>
@@ -295,6 +303,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	function handleFilterForumsGetRequest()
 	{
 		global $db_conn;
+
+		if (empty($_GET["url"]) && empty($_GET["status"]) && empty($_GET["title"])) {
+			echo "<p><font color=red> <b>ERROR</b>: You must specify a value for at least one of URL, Status, or Title in order to filter.</font></p>";
+			return;
+		}
+
 		$count = 0; // 0 indicates that we're handling the first filtering condition; 
 		$tuple = array();
 		$query = "SELECT * FROM Forum4 WHERE";		
@@ -337,6 +351,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	{
 		global $db_conn;
 
+		if (empty($_POST['url'])) {
+			echo "<p><font color=red> <b>ERROR</b>: You must specify a valid Forum URL to join.</font></p>";
+			return;
+		}
+
 		// Getting the values from user and insert data into the table
 		$tuple = array(
 			":bind1" => $_POST['uid'],
@@ -354,13 +373,18 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		} else {
 			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to add you to a forum :( <br>
 					Make sure that you've entered a valid User ID (which should be an integer) 
-					and the URL to an <i>existing</i> Forum (use our view forums functionality to see what's available).</font><p>";
+					and the URL to an <i>existing</i> Forum that you haven't already joined (use our view forums functionality to see what's available).</font><p>";
 		}
 	}
 	
 	function handleLeaveForumDeleteRequest()
 	{
 		global $db_conn;
+
+		if (empty($_POST['url'])) {
+			echo "<p><font color=red> <b>ERROR</b>: You must specify a valid Forum URL to leave.</font></p>";
+			return;
+		}
 
 		// Getting the values from user and insert data into the table
 		$tuple = array(
@@ -375,7 +399,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$result = executeBoundSQL("DELETE FROM Participates WHERE UserID=:bind1 AND URL=:bind2", $alltuples);
 		oci_commit($db_conn);
 		if ($result["success"] == TRUE) {
-			echo "<p><font color=green> <b>SUCCESS</b>: Your request was successfully processed :)</font></p>";
+			echo "<p><font color=green> <b>SUCCESS</b>: Your successfully left a forum (if you had joined it to begin with) :)</font></p>";
 		} else {
 			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to remove you from a forum :( <br>
 					Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
