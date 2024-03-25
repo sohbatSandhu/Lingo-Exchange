@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 
 // Set some parameters
 // Database access configuration
-$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "pass";	// change to 'a' + your student number
+$config["dbuser"] = "ora_mahinpei";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a39405501";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -85,7 +85,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 					<option value="51">51 (Gold Medal)</option>
 					<option value="52">52 (Silver Medal)</option>
 					<option value="53">53 (Bronze Medal)</option>
-					<option value="54'">54 (Certificate of Achievement)</option>
+					<option value="54">54 (Certificate of Achievement)</option>
 					<option value="55">55 (Badge of Honor)</option>
 				</select>
 				</td>
@@ -238,15 +238,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "</table>";
 	}
 
-	function printViewAttributes($result)
+	function printViewAttributes($result, $tableName)
 	{ //prints results from a select statement
-		echo "<br>Results for viewing attributes of a specified table:<br><br>";
+		$count = 0;
+		echo "<br>Results for viewing attributes of " . $tableName . ":<br><br>";
 		echo "<table>";
 		echo "<tr>
 				<th>TableName</th>
 				<th>ColumnName</th>
 			 </tr>";
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			$count = $count + 1;
 			// echo <tr> $row[0]  <tr>;
 			 echo "<tr>
 			 			<td>" . $row[0] . "</td>
@@ -254,6 +256,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 					</tr>";
 		}
 		echo "</table>";
+		if ($count == 0) {
+			echo "<p><font color=blue> <b>Empty Relation</b>: Your request resulted in an empty relation. Make sure that the table name you've entered exists in our database.</font><p>";
+		}
 	}
 
 	function printViewAchievement1($result)
@@ -296,9 +301,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "</table>";
 	}
 
-    function printProjectAttributes($result, $attributes, $count)
+    function printProjectAttributes($result, $attributes, $count, $table)
 	{ //prints results from a select statement
-		echo "<br>Results for projecting specified attributes of a specified table:<br><br>";
+		echo "<br>Results for projecting the specified attributes of " . $table . ":<br><br>";
 		echo "<table>";
         $header = "<tr>";
         foreach (explode(',', $attributes) as $value) {
@@ -329,6 +334,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	{
 		global $db_conn;
 
+		if (empty($_GET['table'])) {
+			echo "<p><font color=red> <b>ERROR</b>: You must specify a valid table name in order to view its attributes.</font></p>";
+			return;
+		}
+
 		$tuple = array(
 			":bind1" => $_GET['table'],
 		);
@@ -340,7 +350,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 								   WHERE table_name=:bind1", $alltuples);
 		oci_commit($db_conn);
         if ($result["success"] == TRUE) {
-			printViewAttributes($result["statement"]);
+			printViewAttributes($result["statement"], $_GET['table']);
 		}
 		if ($result["success"] == FALSE) {
 			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show the attributes for the specified table :( <br>
@@ -365,6 +375,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
     function handleProjectAttributesGetRequest()
 	{
 		global $db_conn;
+
+		if (empty($_GET['table']) || empty($_GET['attributes'])) {
+			echo "<p><font color=red> <b>ERROR</b>: You must specify a valid table name along with a valid list of comma-separated attributes in order to project.</font></p>";
+			return;
+		}
         
         $table = $_GET['table'];
         $attributes = $_GET['attributes'];
@@ -374,11 +389,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		oci_commit($db_conn);
         if ($result["success"] == TRUE) {
-			printProjectAttributes($result["statement"], $attributes, $count);
+			printProjectAttributes($result["statement"], $attributes, $count, $table);
 		}
 		if ($result["success"] == FALSE) {
 			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to project the specified attributes for the specified table :( <br>
-					Make sure that you've entered a valid table name and a comma-separated list of attributes.</font><p>";
+					Make sure that you've entered a valid table name and a comma-separated list of valid attributes that <b>belong to the specified table</b>.</font><p>";
 		}
 	}
 
@@ -388,6 +403,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$first = 1;
 		$tuple = array();
 		$query = "UPDATE Achievement2 SET";	
+
+		if (empty($_POST["id"])) {
+			echo "<p><font color=red> <b>ERROR</b>: You must specify a valid Achievement ID in order for the update to take place.</font></p>";
+			return;
+		}
+
 		if (!empty($_POST["name"]) && $first==1) {
 			$query .= " AchievementName=:bind1";
 			$tuple[':bind1'] = $_POST["name"];
@@ -418,10 +439,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		$result = executeBoundSQL($query, $alltuples);
 		oci_commit($db_conn);		
 		if ($result["success"] == TRUE) {
-			echo "<p><font color=green> <b>SUCCESS</b>: The attributes of the specified achievement have been updated in Achievement2 :) </font><p>";
+			echo "<p><font color=green> <b>SUCCESS</b>: The attributes of the specified achievement (if it existed) have been updated in Achievement2 :) </font><p>";
 		}
 		if ($result["success"] == FALSE) {
-			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to update the specified achievement :( </font><p>";
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to update the specified achievement :( <br>
+			Make sure that you've entered a valid Achievement ID (which should be an integer).</font><p>";
 		}
 
 	}
