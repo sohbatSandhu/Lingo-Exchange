@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 
 // Set some parameters
 // Database access configuration
-$config["dbuser"] = "ora_cwl";		// change "cwl" to your own CWL
-$config["dbpassword"] = "pass";		// change to 'a' + your student number
+$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
+$config["dbpassword"] = "pass";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -49,6 +49,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </style>
 <body>
 	<h1 style="text-align:center">Forums Management Page</h1>
+	<div style="text-align:center">
+		<form method="POST" action="home.php">
+			<input type="hidden" id="home" name="home">
+			<input type="submit" value="Return to Home Page">
+		</form>
+	</div>
+	<hr />
 	<h2>Join a Forum</h2>
 	<p>Join an existing forum!</p>
 	<form method="POST" action="forums.php">

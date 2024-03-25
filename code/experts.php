@@ -49,6 +49,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </style>
 <body>
 	<h1 style="text-align:center">Experts Management Page</h1>
+	<div style="text-align:center">
+		<form method="POST" action="home.php">
+			<input type="hidden" id="home" name="home">
+			<input type="submit" value="Return to Home Page">
+		</form>
+	</div>
+	<hr />
 	<h2>Request an Expert</h2>
 	<p>Get assigned to an expert by selecting one from our drop-down below!</p>
 	<form method="POST" action="experts.php">

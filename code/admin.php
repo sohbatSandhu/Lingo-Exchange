@@ -49,8 +49,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </style>
 <body>
 	<h1 style="text-align:center">Admin Page</h1>
-	As an admin, you will be able to view and update the Achievements offered across the Lingo Exchange system.
-	You will also be able to view all the tables and attributes stored in the Lingo Exchange database.
+	<p>As an admin, you will be able to view and update the Achievements offered across the Lingo Exchange system.
+	You will also be able to view all the tables and attributes stored in the Lingo Exchange database.</p>
+	<div style="text-align:center">
+		<form method="POST" action="home.php">
+			<input type="hidden" id="home" name="home">
+			<input type="submit" value="Return to Home Page">
+		</form>
+	</div>
 	<hr />
 	<h2>View Achievements</h2>
 	<p>View all the tuples in the Achievement1 table.</p>
