@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 
 // Set some parameters
 // Database access configuration
-$config["dbuser"] = "ora_cwl";	// change "cwl" to your own CWL !!!!!!
-$config["dbpassword"] = "aSID";	// change to 'a' + your student number !!!!!
+$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
+$config["dbpassword"] = "pass";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -292,6 +292,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function printViewCities($result)
 	{ //prints results from a select statement
+		$count = 0;
 		echo "<br>Results for viewing cities:<br><br>";
 		echo "<table>";
 		echo "<tr>
@@ -306,6 +307,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 					</tr>";
 		}
 		echo "</table>";
+		if ($count == 0) {
+			echo "<p><font color=blue> <b>Empty Relation</b>: Your request resulted in an empty relation.</font><p>";
+		}
 	}
 
 	function handleViewExpertsGetRequest()
@@ -376,6 +380,11 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	{
 		global $db_conn;
 
+		if (empty($_GET['threshold'])) {
+			echo "<p><font color=red> <b>ERROR</b>: You must specify a threshold value in order to perform this operation.</font></p>";
+			return;
+		}
+
 		$tuple = array(
 			":bind1" => $_GET['threshold'],
 		);
@@ -392,7 +401,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 		if ($result["success"] == FALSE) {
 			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show the cities meeting the above condition :( <br>
-					Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
+					Make sure that you've entered a valid threshold (which should be an integer).</font><p>";
 		}
 	}
 

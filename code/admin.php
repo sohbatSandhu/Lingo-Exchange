@@ -27,8 +27,8 @@ error_reporting(E_ALL);
 
 // Set some parameters
 // Database access configuration
-$config["dbuser"] = "ora_mahinpei";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a39405501";	// change to 'a' + your student number
+$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
+$config["dbpassword"] = "pass";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
