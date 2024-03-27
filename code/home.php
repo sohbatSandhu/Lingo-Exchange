@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
+$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -38,8 +38,12 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 // The next tag tells the web server to stop parsing the text as PHP. Use the
 // pair of tags wherever the content switches to PHP
 
-// Remember Logged In User Information
+// Logged In User Information maded available using SESSION variable
 session_start();
+
+if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_SESSION is empty
+
+// Set Logged In user Information
 $userID = $_SESSION['userID'];
 $userName = $_SESSION['userName'];
 $age = $_SESSION['age'];
@@ -71,7 +75,7 @@ $expert = $_SESSION['expert'];
 
 	<h2> Edit Profile </h2>
 	<p>
-		Edit Account Information <b>(UserID: <?php global $userID; echo htmlspecialchars($userID); ?>)</b>
+		Edit Account Information for <b>UserID: <?php global $userID; echo htmlspecialchars($userID); ?></b>
 		<br>
 		Update the attributes you want to update by specifing the desired attribute value under the <b>New Information</b> column.
 		<br>
@@ -82,26 +86,47 @@ $expert = $_SESSION['expert'];
 	<form method="POST" action="home.php">
 		<input type="hidden" id="updateUserInformation" name="updateUserInformation">
 		<table>
-			<tr><th>Attribute Name</th><th>Current Information</th><th>New Information</th></tr>
+			<tr><th>Attribute Name</th><th>Current Information</th><th>Update Information</th></tr>
 			<tr><td>User Name</td><th> <?php global $userName; echo htmlspecialchars($userName); ?> </th><td><input type="text" name="newUserName"></td></tr>
 			<tr><td>Age (Between 1 and 150)</td><th> <?php global $age; echo htmlspecialchars($age); ?> </th><td><input type="number" name="newAge" min="1" max="150"></td></tr>
 			<tr><td>Password</td><th> <?php global $password; echo htmlspecialchars($password); ?> </th><td><input type="text" name="newPassword"></td></tr>
-			<tr><td>Expert Assigned</td><th> <?php global $expert; echo (isset($expert)) ? htmlspecialchars($expert) : "Not Assigned"; ?> </th><td><input type="submit" value = "Edit Assigned Expert" name="expertPage"></td></tr>
-		</table>
-		<br>
-		<input type="submit" value="Update Information" name="updateUser"></p>
+			<tr><td>Expert Assigned</td><th> <?php global $expert; echo (isset($expert)) ? htmlspecialchars($expert) : "Not Assigned"; ?> 	</th><td>
+								<form method="POST" action="experts.php">
+									<input type="hidden" id="expertNavRequest" name="expertNavRequest">
+									<input type="submit" value="Edit Assigned Expert">
+								</form>
+							</td></tr>
+		</table> <br/>
+		<input type="submit" value="Update Information" name="updateUser">
 	</form>
-	<form method="POST" action="welcome.php">
-		<input type="hidden" id="logout" name="logout">
-		<input type="submit" value="Logout"></p>
+	<form method="POST" action="home.php">
+		<input type="hidden" id="logoutRequest" name="logoutRequest"> <br>
+		<input type="submit" value="LOGOUT" name="logoutUser">
 	</form>
+	<form method="POST" action="home.php">
+		<input type="hidden" id="deleteUserRequest" name="deleteUserRequest">
+		<input type="submit" value="DELETE ACCOUNT" name="deleteAccount" style="color:red;">
+	</form>
+	
 	<hr />
 
 	<h2>Navigation</h2>
-	<p>...</p>
-	<form method="GET" action="home.php">
-		<input type="hidden" id="navTo...Request" name="navTo...Request"> 
-		<input type="submit" value="... Page"> <br /><br />
+	<p>NAVIGATE TO OTHER PAGES FOR LANGUAGE LEARNING</p>
+	<form method="POST" action="exercises.php">
+		<input type="hidden" id="excerciseNavRequest" name="excerciseNavRequest">
+		<input type="submit" value="Practice Exercises">
+	</form>
+	<form method="POST" action="materials.php">
+		<input type="hidden" id="materialsNavRequest" name="materialsNavRequest">
+		<input type="submit" value="View Materials Provided">
+	</form>
+	<form method="POST" action="experts.php">
+		<input type="hidden" id="expertNavRequest" name="expertNavRequest">
+		<input type="submit" value="Manage Experts">
+	</form>
+	<form method="POST" action="forums.php">
+		<input type="hidden" id="forumsNavRequest" name="forumsNavRequest">
+		<input type="submit" value="Participate in Interaction Forums">
 	</form>
 
 	<hr />
@@ -138,8 +163,6 @@ $expert = $_SESSION['expert'];
 	</form>
 	
 	<hr />
-
-	<hr style="border: 1px dashed gray;" />
 
 	<h2>View and Remove Current Languages</h2>
 	<p>VIEW ALL LANGUAGES AND DIALECT COMBINATIONS CURRENTLY LEARNING</p>
@@ -302,12 +325,17 @@ $expert = $_SESSION['expert'];
 				<th>Language Name</th>
 				<th>Number of Dialects</th>
 			</tr>";
-
+		$count = 0;
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 					<td>" . $row[0] . "</td>
 					<td>" . $row[1] . "</td>
 				</tr>";
+			$count = $count + 1;
+		}
+
+		if ($count == 0) {
+			echo "<p><font color=red> <b>ERROR</b>: No Languages found with a Minimum of " . $_GET["minDia"] . " Dialects</font><p>";
 		}
 
 		echo "</table>";
@@ -322,13 +350,18 @@ $expert = $_SESSION['expert'];
 				<th>Dialect</th>
 				<th>Start Date</th>
 			</tr>";
-
+		$count = 0; // counter to check the number of tuples extracted from $result
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 					<td>" . $row[1] . "</td>
 					<td>" . $row[2] . "</td>
 					<td>" . $row[3] . "</td>
 				</tr>";
+			$count = $count + 1;
+		}
+
+		if ($count == 0) {
+			echo "<p><font color=red> <b>ERROR</b>: No Currently Selected Languages. Retry after selecting languages</font><p>";
 		}
 
 		echo "</table>";
@@ -371,9 +404,11 @@ $expert = $_SESSION['expert'];
 			WHERE UserID='$userID'"
 		);
 
-		$userName = $newName;
-		$password = $newPassword;
-		$age = $newAge;		
+		// TODO: refreshing page fn...
+
+		$_SESSION["userName"] = $newName;
+		$_SESSION["password"] = $newPassword;
+		$_SESSION["age"] = $newAge;		
 		oci_commit($db_conn);
 	}
 
@@ -439,7 +474,7 @@ $expert = $_SESSION['expert'];
 		$row = oci_fetch_row($result["statement"]);
 
 		if ($row[0] > 0) {
-			echo "<p><font color=red> <b>ERROR</b>: Dialect and Language combination already included in selected languages.</font><p>";
+			echo "<p><font color=red> <b>FAILURE TO INCLUDE COMBINATION</b>: Dialect and Language combination already included in selected languages.</font><p>";
 			return;
 		}
 
@@ -457,7 +492,7 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 		executeBoundSQL("INSERT INTO Learns VALUES (:bind1, :bind2, :bind3, TO_DATE(:bind4, 'YYYY-MM-DD'))", $alltuples);
-		echo "<p><font color=green> <b>SUCCESS</b>: Added " . $checkLang . "Language with " . $checkDial . " dialect successfully!</font><p>";
+		echo "<p><font color=green> <b>SUCCESS</b>: Added " . $checkLang . " Language with " . $checkDial . " dialect to USER " . $userID . " languagues successfully on " . $startDate . " !</font><p>";
 		oci_commit($db_conn);
 	}
 
@@ -487,12 +522,7 @@ $expert = $_SESSION['expert'];
 			WHERE UserID = '$userID'"
 		);
 
-		// TODO: Make appropriate empty table error handling
-		if ($result["success"] == true) {
-			printSelectedLanguages($result["statement"]);
-		} else {
-			echo "<p><font color=red> <b>ERROR</b>: No Currently Selected Languages. Retry after selecting languages</font><p>";
-		}
+		printSelectedLanguages($result["statement"]);
 		
 	}
 
@@ -518,6 +548,12 @@ $expert = $_SESSION['expert'];
 				handleAddLanguageRequest();
 			} else if (array_key_exists('removeLanguage', $_POST)) {
 				handleRemoveLanguageRequest();
+			} else if (array_key_exists('logoutRequest', $_POST)) {
+				session_destroy();
+				header('Location: welcome.php');
+				exit;
+			} else if (array_key_exists('deleteUserRequest', $_POST)) {
+				// TODO: handle delete user request
 			}
 
 			disconnectFromDB();
@@ -540,12 +576,11 @@ $expert = $_SESSION['expert'];
 		}
 	}
 
-	if (isset($_POST['updateUser']) || isset($_POST['addLanguage']) || isset($_POST['removeLanguage'])) {
+	if (isset($_POST['updateUser']) || isset($_POST['addLanguage']) || isset($_POST['removeLanguage']) || isset($_POST['logoutUser']) || isset($_POST['deleteAccount'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest'])) {
 		handleGETRequest();
 	}
-
 	// End PHP parsing and send the rest of the HTML content
 	?>
 </body>
