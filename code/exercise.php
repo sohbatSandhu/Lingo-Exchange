@@ -27,6 +27,21 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 // The next tag tells the web server to stop parsing the text as PHP. Use the
 // pair of tags wherever the content switches to PHP
+
+session_start();
+
+if (empty($_SESSION)) { //check if $_SESSION is empty
+	header('Location: welcome.php'); 
+	exit;
+} 
+
+//set logged in user information
+$userID = $_SESSION['userID'];
+$userName = $_SESSION['userName'];
+$age = $_SESSION['age'];
+$password = $_SESSION['password'];
+$expert = $_SESSION['expert'];
+
 ?>
 
 <html>
@@ -41,10 +56,17 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </style>
 
 <body>
-	<h1>Exercises Page</h1>
+	<h1 style="text-align:center">Exercises Page</h1>
+	<div style="text-align:center">
+		<form method="POST" action="home.php">
+			<input type="hidden" id="home" name="home">
+			<input type="submit" value="Return to Home Page">
+		</form>
+	</div>
+	<hr />
 
 	<h2>View Exercises</h2>
-	<p>View all exercises.</p>
+	<p>View all exercises available.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="displayExercisesRequest" name="displayExercisesRequest">
 		<input type="submit" value="View All" name="displayExercises"></p>
@@ -52,7 +74,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
 	<h2>Question</h2>
-	<p>Choose the exercise you want to work on.</p>
+	<p>Select the name of the exercise you want to work on.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="displayQuestionRequest" name="displayQuestionRequest">
 		<p><select id="exerciseName" name="exerciseName">
@@ -69,6 +91,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			<option value="Must-Know Korean Phrases">Must-Know Korean Phrases</option>
 		</select></p>
 
+		<p>Select the exercise number.</p>
 		<p><select id="exerciseNum" name="exerciseNum">
 			<option value="61">61</option>
 			<option value="62">62</option>
@@ -89,10 +112,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<h2>Mark Complete</h2>
 	<form method="POST" action="exercise.php">
 		<input type="hidden" id="markCompleteRequest" name="markCompleteRequest">
-		<p>Input your userID.</p>
-		UserID: <input type="text" name="userid"> <br /><br />
-
-		<p>Choose exercise.</p>
+		<p>Select the name of the exercise you completed.</p>
 		<p><select id="exerciseName" name="exerciseName">
 			<option value="Active to Passive Voice English">Active to Passive Voice English</option>
 			<option value="Parisian Culture">Parisian Culture</option>
@@ -107,6 +127,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			<option value="Must-Know Korean Phrases">Must-Know Korean Phrases</option>
 		</select></p>
 
+		<p>Select the exercise number you completed.</p>
 		<p><select id="exerciseNum" name="exerciseNum">
 			<option value="61">61</option>
 			<option value="62">62</option>
@@ -125,28 +146,27 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
 	<h2>View Completed Exercises</h2>
+	<p>View all your completed exercises</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="displayCompletedRequest" name="displayCompletedRequest">
-		<p>Input your userID.</p>
-		UserID: <input type="text" name="userid"> <br /><br />
 		<p><input type="submit" value="See Completed" name="displayCompleted"></p>
 	</form>
 	<hr />
 
-	<h2>View Exercise Statistics</h2>
-	<p>View maximum score.</p>
+	<h2>View Exercise Scoreboard</h2>
+	<p>View the maximum score among exercises completed by our users for each language.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="viewMaxRequest" name="viewMaxRequest">
 		<input type="submit" value='View' name="viewMax"></p>
 	</form>
 
-	<p>View minimum score.</p>
+	<p>View the minimum score among exercises completed by our users for each language.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="viewMinRequest" name="viewMinRequest">
 		<input type="submit" value='View' name="viewMin"></p>
 	</form>
 
-	<p>View average score.</p>
+	<p>View the average score among exercises completed by our users for each language.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="viewAvgRequest" name="viewAvgRequest">
 		<input type="submit" value='View' name="viewAvg"></p>
@@ -154,11 +174,9 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<hr />
 
 	<h2>Count Scores Above Average</h2>
-	<p>Show the number of times you scored above average.</p>
+	<p>Show the number of times you scored above average for each language.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="countScoresRequest" name="countScoresRequest">
-		<p>Input your UserID.</p>
-		UserID: <input type="text" name="userid"> <br /><br />
 		<input type="submit" value="Calculate" name="countScores"></p>
 	</form>
 	<hr />
@@ -438,13 +456,13 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function handleMarkCompletedRequest()
 	{
-		global $db_conn;
+		global $db_conn, $userID;
 		
 		$currDate = date('d-M-Y');
 
 		$tuple = array(
 			":bind1" => $currDate, 
-			":bind2" => $_POST['userid'],
+			":bind2" => $userID,
 			":bind3" => $_POST['exerciseName'],
 			":bind4" => $_POST['exerciseNum']
 		);
@@ -466,10 +484,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function handleDisplayCompletedRequest()
 	{
-		global $db_conn;
+		global $db_conn, $userID;
 		
 		$tuple = array(
-			":bind1" => $_GET['userid']
+			":bind1" => $userID
 		);
 
 		$alltuples = array(
@@ -525,10 +543,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function handleCountScoresRequest()
 	{
-		global $db_conn;
+		global $db_conn, $userID;
 
 		$tuple = array(
-			":bind1" => $_GET['userid']
+			":bind1" => $userID
 		);
 
 		$alltuples = array(
