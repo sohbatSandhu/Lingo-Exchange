@@ -36,6 +36,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 // The next tag tells the web server to stop parsing the text as PHP. Use the
 // pair of tags wherever the content switches to PHP
+session_start();
+if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_SESSION is empty
 ?>
 
 <html>
@@ -60,7 +62,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<p>Get assigned to an expert by selecting one from our drop-down below!</p>
 	<form method="POST" action="experts.php">
 		<input type="hidden" id="requestExpertUpdateRequest" name="requestExpertUpdateRequest">
-		User ID: <input type="text" name="uid"> 
+		<!-- User ID: <input type="text" name="uid">  -->
 		<p><select id="email" name="email">
 			<option value="romina.m@mail.com">Romina M</option>
 			<option value="annie.w@mail.com">Annie W</option>
@@ -77,7 +79,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<p>View your current expert.</p>
 	<form method="GET" action="experts.php">
 		<input type="hidden" id="viewMyExpertGetRequest" name="viewMyExpertGetRequest">
-		User ID: <input type="text" name="uid"> <br /><br />
+		<!-- User ID: <input type="text" name="uid"> <br /><br /> -->
 		<input type="submit" value="View My Expert" name="viewMyExpert"></p>
 	</form>
 	<hr style="border: 1px dashed gray;" />
@@ -331,7 +333,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		global $db_conn;
 
 		$tuple = array(
-			":bind1" => $_GET['uid'],
+			":bind1" => $_SESSION['userID'] # $_GET['uid'],
 		);
 		$alltuples = array(
 			$tuple
@@ -418,7 +420,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		// Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['uid'],
+			":bind1" => $_SESSION['userID'], # $_POST['uid'],
 			":bind2" => $_POST['email']
 		);
 

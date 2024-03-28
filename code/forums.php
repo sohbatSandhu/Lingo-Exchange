@@ -34,8 +34,8 @@ $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
 $show_debug_alert_messages = False; // show which methods are being triggered (see debugAlertMessage())
 
-// The next tag tells the web server to stop parsing the text as PHP. Use the
-// pair of tags wherever the content switches to PHP
+session_start();
+if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_SESSION is empty
 ?>
 
 <html>
@@ -60,7 +60,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<p>Join an existing forum!</p>
 	<form method="POST" action="forums.php">
 		<input type="hidden" id="joinForumInsertRequest" name="joinForumInsertRequest">
-		User ID: <input type="text" name="uid"> <br /><br />
+		<!-- User ID: <input type="text" name="uid"> <br /><br /> -->
 		Forum URL: <input type="text" name="url"> <br /><br />
 		<input type="submit" value="Join Forum" name="joinForum"></p>
 	</form>
@@ -71,7 +71,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<p></p>
 	<form method="POST" action="forums.php">
 		<input type="hidden" id="leaveForumDeleteRequest" name="leaveForumDeleteRequest">
-		User ID: <input type="text" name="uid"> <br /><br />
+		<!-- User ID: <input type="text" name="uid"> <br /><br /> -->
 		Forum URL: <input type="text" name="url"> <br /><br />
 		<input type="submit" value="Leave Forum" name="leaveForum"></p>
 	</form>
@@ -81,7 +81,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	<p>View all the forums you've joined.</p>
 	<form method="GET" action="forums.php">
 		<input type="hidden" id="viewMyForumsGetRequest" name="viewMyForumsGetRequest">
-		User ID: <input type="text" name="uid"> <br /><br />
+		<!-- User ID: <input type="text" name="uid"> <br /><br /> -->
 		<input type="submit" value="View My Forums" name="viewMyForums"></p>
 	</form>
 	<hr style="border: 1px dashed gray;" />
@@ -266,8 +266,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		echo "<br>Results for viewing your forums:<br><br>";
 		echo "<table>";
 		echo "<tr>
+				<th>User ID</th>
 				<th>URL</th>
-				<th>Title</th>
 			 </tr>";
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			// echo <tr> $row[0]  <tr>;
@@ -291,7 +291,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		global $db_conn;
 
 		$tuple = array(
-			":bind1" => $_GET['uid'],
+			":bind1" => $_SESSION['userID'] # $_GET['uid'],
 		);
 		$alltuples = array(
 			$tuple
@@ -365,7 +365,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		// Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['uid'],
+			":bind1" => $_SESSION['userID'], # $_POST['uid'],
 			":bind2" => $_POST['url']
 		);
 
@@ -395,7 +395,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 		// Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['uid'],
+			":bind1" => $_SESSION['userID'], # $_POST['uid'],
 			":bind2" => $_POST['url']
 		);
 
