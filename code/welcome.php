@@ -51,40 +51,53 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 <body>
 
 	<h1 style="text-align:center">Welcome to Language Learning Platform</h1>
-	<!-- // TODO: COMPLETE SUMMARY-->
-	<p>TODO : Give summary of the project ... </p>
+	<h3 style="text-align:center">
+		<font color="purple">CATCHY APP NAME</font> aspires to provide an engaging online environment that allows users to comprehensively learn new languages with fellow passionate learners while being assisted by various learning resources. 
+		<br>
+		Our focus extends beyond mere language acquisition - we strive to facilitate a comprehensive language learning journey. 
+	</h3>
 
 	<hr />
 
 	<h2>Create New Account</h2>
-	<p>CHOOSE A UNIQUE USER NAME (Leave a blank space between each part of the name) </p>
+	<p>CHOOSE A UNIQUE USERNAME (Leave a blank space between each part of the name) </p>
 	<form method="POST" action="welcome.php">
 		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-		User Name : <input type="text" name="insName"> <br /><br />
+		Username : <input type="text" name="insName"> <br /><br />
 		Age (between 1 and 150) : <input type="number" name="insAge" min="1" max="150"> <br /><br />
 		Password: <input type="text" name="insPassword"> <br /><br />
 
-		<input type="submit" value="Start Your Learning Journey" name="insertSubmit"></p>
+		<input type="submit" value="Start Your Learning Journey" name="insertUser"></p>
 	</form>
 
 	<hr />
 
 	<h2>Login</h2>
 	<p>
-		SIGN IN TO CONTINUE TO YOUR LANGUAGE LEARNING JOURNEY: HOME Page
+		SIGN IN TO CONTINUE TO YOUR LANGUAGE LEARNING JOURNEY
 		<br>
 		<font color=blue><b>WARNING:</b> The values are case sensitive and if you enter in the wrong case, access will be denied </font>
 	</p>
 
 	<form method="POST" action="welcome.php">
 		<input type="hidden" id="accessAccountRequest" name="accessAccountRequest">
-		User Name: <input type="text" name="getName"> <br /><br />
-		Password: <input type="text" name="getPassword"> <br /><br />
-
+		<b>Username:</b> <input type="text" name="getName"> <br /><br />
+		<b>Password:</b> <input type="text" name="getPassword"> <br /><br />
 		<input type="submit" value="Login" name="getLogin"></p>
 	</form>
 
 	<hr />
+
+	<h3 color="red">Administration View</h3>
+	<p>
+		ACCESS LANGUAGE LEARNING DATABASE AS AN ADMINISTRATOR
+	</p>
+	<form method="POST" action="admin.php">
+		<input type="hidden" id="adminLoginRequest" name="adminLoginRequest">
+		<input type="submit" value="ADMIN LOGIN" name="adminLogin" style="color:red;">
+	</form>
+
+	<hr style="border: 1px dashed gray;" />
 
 	<?php
 	// The following code will be parsed as PHP
@@ -245,7 +258,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		// Check if a row was fetched
 		if (($row = oci_fetch_row($result["statement"])) != false) {
 			// Password found in the database, compare it with the provided password
-			// echo $row[0] . "<br>" . $row[1] . "<br>" . $row[2] . "<br>" . $row[3] . "<br>" . $checkPassword . "<br>" . $checkUserName;
 			if ($row[3] == $checkPassword) {
 				$_SESSION['userID'] = $row[0];
 				$_SESSION['userName'] = $row[1];
@@ -278,7 +290,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
-	if (isset($_POST['insertSubmit']) || isset($_POST['getLogin'])) {
+	if (isset($_POST['insertUser']) || isset($_POST['getLogin'])) {
 		handlePOSTRequest();
 	}
 
