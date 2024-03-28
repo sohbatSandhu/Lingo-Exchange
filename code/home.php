@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
+$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -112,7 +112,7 @@ $expert = $_SESSION['expert'];
 
 	<h2>Navigation</h2>
 	<p>NAVIGATE TO OTHER PAGES FOR LANGUAGE LEARNING</p>
-	<form method="POST" action="exercises.php">
+	<form method="POST" action="exercise.php">
 		<input type="hidden" id="excerciseNavRequest" name="excerciseNavRequest">
 		<input type="submit" value="Practice Exercises">
 	</form>
