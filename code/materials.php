@@ -1,14 +1,4 @@
-<!-- Test Oracle file for UBC CPSC304
-  Created by Jiemin Zhang
-  Modified by Simona Radu
-  Modified by Jessica Wong (2018-06-22)
-  Modified by Jason Hall (23-09-20)
-  This file shows the very basics of how to execute PHP commands on Oracle.
-  Specifically, it will drop a table, create a table, insert values update
-  values, and then query for values
-  IF YOU HAVE A TABLE CALLED "demoTable" IT WILL BE DESTROYED
-
-  The script assumes you already have a server set up All OCI commands are
+<!-- Resources Page - The script assumes you already have a server set up All OCI commands are
   commands to the Oracle libraries. To get the file to work, you must place it
   somewhere where your Apache server can run it, and you must rename it to have
   a ".php" extension. You must also change the username and password on the
@@ -51,13 +41,20 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 </style>
 
 <body>
-	<h1>Resources Page</h1>
+	<h1 style="text-align:center">Materials Page</h1>
+	<div style="text-align:center">
+		<form method="POST" action="home.php">
+			<input type="hidden" id="home" name="home">
+			<input type="submit" value="Return to Home Page">
+		</form>
+	</div>
+	<hr />
 
-	<h2>Resources</h2>
-	<p>View all resources.</p>
+	<h2>Study Materials</h2>
+	<p>View all study materials.</p>
 	<form method="GET" action="materials.php">
 		<input type="hidden" id="displayAllMatRequest" name="displayAllMatRequest">
-		<input type="submit" value="View Resources" name="displayAllMat"></p>
+		<input type="submit" value="View Materials" name="displayAllMat"></p>
 	</form>
 	<hr />
 
@@ -115,8 +112,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	</form> 
 	<hr />
 
-	<h2>Update Resource</h2>
-	<p>Input the MaterialID for the resource you want to update.</p>
+	<h2>Update Study Material</h2>
+	<p>Input the MaterialID for the study material you want to update.</p>
 	<form method="POST" action="materials.php">
 		<input type="hidden" id="updateMatRequest" name="updateMatRequest">
 		MaterialID: <input type="text" name="mid"> <br /><br />
@@ -126,8 +123,8 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 	</form> 
 	<hr />
 
-	<h2>Remove Resource</h2>
-	<p>Input the MaterialID of the resource you wish to remove.</p>
+	<h2>Remove Study Material</h2>
+	<p>Input the MaterialID of the study material you wish to remove.</p>
 	<form method="POST" action="materials.php">
 		<input type="hidden" id="deleteMatRequest" name="deleteMatRequest">
 		MaterialID: <input type="text" name="mid"> <br /><br />
@@ -244,13 +241,14 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	function printAllMaterials($result)
 	{ //prints all resources from a select statement
-		echo "<br>Resources:<br>";
+		echo "<br>Study Materials:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
 			<th>MaterialName</th>
 			<th>Purpose</th>
 		</tr>";
+
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 				<td>" . $row[0] . "</td>
@@ -270,6 +268,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			<th>MaterialName</th>
 			<th>Author</th>
 		</tr>";
+
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 				<td>" . $row[0] . "</td>
@@ -289,6 +288,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			<th>MaterialName</th>
 			<th>Developer</th>
 		</tr>";
+
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 				<td>" . $row[0] . "</td>
@@ -376,7 +376,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		);
 
 		$result = executeBoundSQL("INSERT INTO Book VALUES (:bind1, :bind2)", $alltuples);
-
 		oci_commit($db_conn);
 
 		if ($result["success"] == TRUE && $matResult["success"] == TRUE) {
@@ -546,7 +545,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			} else if(array_key_exists('displayAllWebsitesRequest', $_GET)) {
 				handleDisplayAllWebsitesRequest();
 			}
-
 			disconnectFromDB();
 		}
 	}
