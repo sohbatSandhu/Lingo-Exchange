@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
+$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -99,7 +99,7 @@ $expert = $_SESSION['expert'];
 		</table> <br/>
 		<input type="submit" value="Update Information" name="updateUser">
 	</form>
-	<form method="POST" action="home.php">
+	<form method="POST" action="welcome.php">
 		<input type="hidden" id="logoutRequest" name="logoutRequest"> <br>
 		<input type="submit" value="LOGOUT" name="logoutUser">
 	</form>
@@ -112,7 +112,7 @@ $expert = $_SESSION['expert'];
 
 	<h2>Navigation</h2>
 	<p>NAVIGATE TO OTHER PAGES FOR LANGUAGE LEARNING</p>
-	<form method="POST" action="exercise.php">
+	<form method="POST" action="exercises.php">
 		<input type="hidden" id="excerciseNavRequest" name="excerciseNavRequest">
 		<input type="submit" value="Practice Exercises">
 	</form>
@@ -185,6 +185,7 @@ $expert = $_SESSION['expert'];
 		<input type="submit" value="Remove Language" name="removeLanguage">
 	</form>
 
+	<hr />
 	<hr style="border: 1px dashed gray;" />
 
 	<?php
@@ -506,7 +507,7 @@ $expert = $_SESSION['expert'];
 			"SELECT LanguageName, COUNT(Dialect)
 			FROM Language2
 			GROUP BY LanguageName 
-			HAVING COUNT(Dialect) > '$minNum'"
+			HAVING COUNT(Dialect) >= '$minNum'"
 		);
 		printMinDialectsLanguages($result["statement"]);
 	}
@@ -538,6 +539,24 @@ $expert = $_SESSION['expert'];
 		printLanguages($result["statement"]);
 	}
 
+	function handleDeleteUserRequest()
+	{
+		global $db_conn, $userID;
+
+		// Getting the values from user and insert data into the table
+		$tuple = array(
+			":bind1" => $userID
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		executePlainSQL("DELETE FROM Learner_Consults WHERE UserID='" . $userID . "'");
+		oci_commit($db_conn);
+		session_destroy();
+	}
+
 	// HANDLE ALL POST ROUTES
 	function handlePOSTRequest()
 	{
@@ -553,7 +572,7 @@ $expert = $_SESSION['expert'];
 				header('Location: welcome.php');
 				exit;
 			} else if (array_key_exists('deleteUserRequest', $_POST)) {
-				// TODO: handle delete user request
+				handleDeleteUserRequest();
 			}
 
 			disconnectFromDB();
