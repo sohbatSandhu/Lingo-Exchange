@@ -98,7 +98,7 @@ CREATE TABLE Exercise3(
 CREATE TABLE Exercise4(
 	ExerciseName   VARCHAR(50),
 	ExerciseNumber INTEGER,
-    Score		   REAL,
+    Points		   REAL,
     PRIMARY KEY (ExerciseName, ExerciseNumber),
     FOREIGN KEY (ExerciseName) REFERENCES Exercise1
 	    ON DELETE CASCADE
@@ -364,17 +364,17 @@ INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Chinese Oral Exercise', 
 INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Advanced Spanish Grammar Quiz', '60');
 INSERT INTO Exercise3(ExerciseName, TimeLimit) VALUES ('Must-Know Korean Phrases', '75');
 
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Active to Passive Voice English', 61, 0.90);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Parisian Culture', 62, 0.85);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Chinese Vocabulary Quiz', 63, 0.77);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Spanish Grammar Quiz', 64, 0.95);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('German Pronunciation Workout', 65, 0.80);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Korean Alphabet Quiz', 92, 0.95);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Mock Spelling Bee', 93, 0.49);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('French Pronunciation Quiz', 94, NULL);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Chinese Oral Exercise', 95, 0.88);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Advanced Spanish Grammar Quiz', 96, 0.75);
-INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Score) VALUES ('Must-Know Korean Phrases', 97, 0.97);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Active to Passive Voice English', 61, 90);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Parisian Culture', 62, 85);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Chinese Vocabulary Quiz', 63, 77);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Spanish Grammar Quiz', 64, 95);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('German Pronunciation Workout', 65, 80);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Korean Alphabet Quiz', 92, 95);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Mock Spelling Bee', 93, 49);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('French Pronunciation Quiz', 94, NULL);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Chinese Oral Exercise', 95, 88);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Advanced Spanish Grammar Quiz', 96, 75);
+INSERT INTO Exercise4(ExerciseName, ExerciseNumber, Points) VALUES ('Must-Know Korean Phrases', 97, 97);
 
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('romina.m@mail.com', 'Korean', 'Gyeonggi Dialect', 10);
 INSERT INTO Specializes(ExpertEmail, LanguageName, Dialect, YearsExperience) VALUES ('annie.w@mail.com', 'Chinese', 'Mandarin', 10);
