@@ -11,7 +11,7 @@
 
 // The following 3 lines allow PHP errors to be displayed along with the page
 // content. Delete or comment out this block when it's no longer needed.
-ini_set('display_errors', 1);
+ini_set('display_errors', 0); //change to 0 to hide warning messages
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
@@ -442,15 +442,22 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 
-		$result = executeBoundSQL("SELECT QuestionName FROM Question_Has
-								   WHERE ExerciseName = :bind1
-								   AND ExerciseNumber = :bind2", $alltuples);
-		oci_commit($db_conn);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Completes WHERE ExerciseName = :bind1 AND ExerciseNumber = :bind2", $alltuples);
+		$counter = oci_fetch_row($check["statement"])[0];
 
-		if ($result["success"] == TRUE) {
-			displayQuestion($result["statement"]);
+		if ($counter > 0) {
+			$result = executeBoundSQL("SELECT QuestionName FROM Question_Has
+								   	   WHERE ExerciseName = :bind1
+								   	   AND ExerciseNumber = :bind2", $alltuples);
+			oci_commit($db_conn);
+
+			if ($result["success"] == TRUE) {
+				displayQuestion($result["statement"]);
+			} else {
+				echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the exercise is correct</font><p>";
+			}
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the exercise is correct</font><p>";
+			echo "<p><font color='grey'><b>There are no questions for this exercise name and number :( Check the exercise name and number again.</b></font><p>";
 		}
 	}
 
@@ -471,14 +478,21 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 
-		$result = executeBoundSQL("UPDATE Completes SET CompletionDate = :bind1
-								   WHERE UserID = :bind2 AND ExerciseName = :bind3 AND ExerciseNumber = :bind4", $alltuples);
-		oci_commit($db_conn);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Completes WHERE ExerciseName = :bind1 AND ExerciseNumber = :bind2", $alltuples);
+		$counter = oci_fetch_row($check["statement"])[0];
 
-		if ($result["success"] == TRUE) {
-			echo "<p><font color=green> Yay! Completed an exercise :)</font></p>";
+		if($counter > 0) {
+			$result = executeBoundSQL("UPDATE Completes SET CompletionDate = :bind1
+								   	   WHERE UserID = :bind2 AND ExerciseName = :bind3 AND ExerciseNumber = :bind4", $alltuples);
+			oci_commit($db_conn);
+
+			if ($result["success"] == TRUE) {
+				echo "<p><font color=green> Yay! Completed an exercise :)</font></p>";
+			} else {
+				echo "<p><font color=red>Try again :(</font><p>";
+			}
 		} else {
-			echo "<p><font color=red>Try again :(</font><p>";
+			echo "<p><font color=grey><b>There are no questions for this exercise name and number :( Check the exercise name and number again.</b></font><p>";
 		}
 	}
 
@@ -494,14 +508,21 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 
-		$result = executeBoundSQL("SELECT ExerciseName, ExerciseNumber, CompletionDate FROM Completes
-								   WHERE UserID = :bind1", $alltuples);
-		oci_commit($db_conn);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Completes WHERE UserID = :bind1", $alltuples);
+		$counter = oci_fetch_row($check["statement"])[0];
 
-		if ($result["success"] == TRUE) {
-			displayCompleted($result["statement"]);
+		if($counter > 0) {
+			$result = executeBoundSQL("SELECT ExerciseName, ExerciseNumber, CompletionDate FROM Completes
+								   	   WHERE UserID = :bind1", $alltuples);
+			oci_commit($db_conn);
+
+			if ($result["success"] == TRUE) {
+				displayCompleted($result["statement"]);
+			} else {
+				echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the userID is correct</font><p>";
+			}
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the userID is correct</font><p>";
+			echo "<p><b>You haven't completed any exercises yet!</b><p>";
 		}
 	}
 
