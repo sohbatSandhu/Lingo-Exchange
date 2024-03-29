@@ -91,7 +91,7 @@ $expert = $_SESSION['expert'];
 			<option value="Must-Know Korean Phrases">Must-Know Korean Phrases</option>
 		</select></p>
 
-		<p>Select the exercise number.</p>
+		<p>Select the exercise you want to work on.</p>
 		<p><select id="exerciseNum" name="exerciseNum">
 			<option value="61">61</option>
 			<option value="62">62</option>
@@ -154,30 +154,30 @@ $expert = $_SESSION['expert'];
 	<hr />
 
 	<h2>View Exercise Scoreboard</h2>
-	<p>View the maximum score among exercises completed by our users for each language.</p>
+	<p>View the maximum amount of points obtained among exercises completed by our users for each language.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="viewMaxRequest" name="viewMaxRequest">
 		<input type="submit" value='View' name="viewMax"></p>
 	</form>
 
-	<p>View the minimum score among exercises completed by our users for each language.</p>
+	<p>View the minimum amount of points obtained among exercises completed by our users for each language.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="viewMinRequest" name="viewMinRequest">
 		<input type="submit" value='View' name="viewMin"></p>
 	</form>
 
-	<p>View the average score among exercises completed by our users for each language.</p>
+	<p>View the average amount of points obtained among exercises completed by our users for each language.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="viewAvgRequest" name="viewAvgRequest">
 		<input type="submit" value='View' name="viewAvg"></p>
 	</form>
 	<hr />
 
-	<h2>Count Scores Above Average</h2>
-	<p>Show the number of times you scored above average for each language.</p>
+	<h2>Count Points Above Average</h2>
+	<p>Show the number of times you got more points than the average points obtained for each language.</p>
 	<form method="GET" action="exercise.php">
-		<input type="hidden" id="countScoresRequest" name="countScoresRequest">
-		<input type="submit" value="Calculate" name="countScores"></p>
+		<input type="hidden" id="countPointsRequest" name="countPointsRequest">
+		<input type="submit" value="Calculate" name="countPoints"></p>
 	</form>
 	<hr />
 
@@ -350,11 +350,11 @@ $expert = $_SESSION['expert'];
 
 	function displayMax($result)
 	{ //prints the maximum score for each language using aggregation and group by
-		echo "<br>Maximum Scores<br>";
+		echo "<br>Maximum Points<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>LanguageName</th>
-			<th>MaxScore</th>
+			<th>MaxPoints</th>
 		</tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
@@ -368,11 +368,11 @@ $expert = $_SESSION['expert'];
 
 	function displayMin($result)
 	{ //prints the minimum score for each language using aggregation and group by
-		echo "<br>Minimum Scores<br>";
+		echo "<br>Minimum Points<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>LanguageName</th>
-			<th>MinScore</th>
+			<th>MinPoints</th>
 		</tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
@@ -386,11 +386,11 @@ $expert = $_SESSION['expert'];
 
 	function displayAvg($result)
 	{ //prints the average score for each language using aggregation and group by
-		echo "<br>Average Scores<br>";
+		echo "<br>Average Points<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>LanguageName</th>
-			<th>AverageScore</th>
+			<th>AveragePoints</th>
 		</tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
@@ -509,7 +509,7 @@ $expert = $_SESSION['expert'];
 	{
 		global $db_conn;
 
-		$result = executePlainSQL("SELECT c.LanguageName, ROUND(MAX(e4.Score), 2) AS MaxScore
+		$result = executePlainSQL("SELECT c.LanguageName, ROUND(MAX(e4.Points), 2) AS MaxPoints
 								   FROM Exercise4 e4, Completes c
 								   WHERE e4.ExerciseName = c.ExerciseName 
 								   AND e4.ExerciseNumber = c.ExerciseNumber
@@ -521,7 +521,7 @@ $expert = $_SESSION['expert'];
 	{
 		global $db_conn;
 
-		$result = executePlainSQL("SELECT c.LanguageName, ROUND(MIN(e4.Score), 2) AS MinScore
+		$result = executePlainSQL("SELECT c.LanguageName, ROUND(MIN(e4.Points), 2) AS MinPoints
 								   FROM Exercise4 e4, Completes c
 								   WHERE e4.ExerciseName = c.ExerciseName 
 								   AND e4.ExerciseNumber = c.ExerciseNumber
@@ -533,7 +533,7 @@ $expert = $_SESSION['expert'];
 	{
 		global $db_conn;
 
-		$result = executePlainSQL("SELECT c.LanguageName, ROUND(AVG(e4.Score), 2) AS AverageScore
+		$result = executePlainSQL("SELECT c.LanguageName, ROUND(AVG(e4.Points), 2) AS AveragePoints
 								   FROM Completes c
 								   LEFT JOIN Exercise4 e4
 								   ON c.ExerciseName = e4.ExerciseName AND c.ExerciseNumber = e4.ExerciseNumber
@@ -553,17 +553,17 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 
-		$result = executeBoundSQL("SELECT c.LanguageName, COUNT(DISTINCT FltrScores.Score) AS AboveAverage 
+		$result = executeBoundSQL("SELECT c.LanguageName, COUNT(DISTINCT FltrPoints.Points) AS AboveAverage 
 								   FROM Completes c
 								   LEFT JOIN Exercise4 e
 								   ON c.ExerciseName = e.ExerciseName AND c.ExerciseNumber = e.ExerciseNumber
-								   LEFT JOIN (SELECT e1.Score 
+								   LEFT JOIN (SELECT e1.Points
 								   			  FROM Exercise4 e1
-				  							  WHERE e1.Score > (SELECT AVG(e2.Score) 
+				  							  WHERE e1.Points > (SELECT AVG(e2.Points) 
 											  					FROM Completes c2 
 																LEFT JOIN Exercise4 e2
-								   			 					ON c2.ExerciseName = e2.ExerciseName AND c2.ExerciseNumber = e2.ExerciseNumber)) FltrScores
-								   ON e.Score = FltrScores.Score
+								   			 					ON c2.ExerciseName = e2.ExerciseName AND c2.ExerciseNumber = e2.ExerciseNumber)) FltrPoints
+								   ON e.Points = FltrPoints.Points
 								   WHERE UserID = :bind1
 								   GROUP BY c.LanguageName", $alltuples);
 		oci_commit($db_conn);
@@ -600,7 +600,7 @@ $expert = $_SESSION['expert'];
 				handleDisplayMinRequest();
 			} else if (array_key_exists('viewAvgRequest', $_GET)) {
 				handleDisplayAvgRequest();
-			} else if (array_key_exists('countScoresRequest', $_GET)) {
+			} else if (array_key_exists('countPointsRequest', $_GET)) {
 				handleCountScoresRequest();
 			} else if (array_key_exists('displayCompletedRequest', $_GET)) {
 				handleDisplayCompletedRequest();
@@ -611,7 +611,7 @@ $expert = $_SESSION['expert'];
 
 	if (isset($_POST['markComplete'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['displayQuestion']) || isset($_GET['displayExercises']) || isset($_GET['viewMax']) || isset($_GET['viewMin']) || isset($_GET['viewAvg']) || isset($_GET['countScores']) || isset($_GET['displayCompleted'])) {
+	} else if (isset($_GET['displayQuestion']) || isset($_GET['displayExercises']) || isset($_GET['viewMax']) || isset($_GET['viewMin']) || isset($_GET['viewAvg']) || isset($_GET['countPoints']) || isset($_GET['displayCompleted'])) {
 		handleGETRequest();
 	}
 
