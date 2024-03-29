@@ -11,7 +11,7 @@
 
 // The following 3 lines allow PHP errors to be displayed along with the page
 // content. Delete or comment out this block when it's no longer needed.
-ini_set('display_errors', 1);
+ini_set('display_errors', 0); //change to 0 to hide warnings
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
@@ -477,21 +477,27 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			$tuple
 		);
 
-		$result = executeBoundSQL("UPDATE Material SET MaterialName = :bind2, Purpose = :bind3 WHERE MaterialID = :bind1", $alltuples);
-		oci_commit($db_conn);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Material WHERE MaterialID = :bind1", $alltuples);
+		$counter = oci_fetch_row($check["statement"])[0];
 
-		if ($result["success"] == TRUE) {
-			echo "<p><font color=green> <b>SUCCESS</b>: Updated a resource :)</font></p>";
+		if($counter > 0) {
+			$result = executeBoundSQL("UPDATE Material SET MaterialName = :bind2, Purpose = :bind3 WHERE MaterialID = :bind1", $alltuples);
+			oci_commit($db_conn);
+
+			if ($result["success"] == TRUE) {
+				echo "<p><font color=green> <b>SUCCESS</b>: Updated a study material :)</font></p>";
+			} else {
+				echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct :)</font><p>";
+			}
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct :)</font><p>";
-		}
-		//TODO: look into error handling so if user updates a MaterialID that doesn't exist there will be an error message. Note: updating a tuple that doesn't exist will just return
+			echo "<p><font color=red><b>Check that the MaterialID you want to update is in the list of Materials :)</b></font><p>";
+		} 
 	}
 
 	function handleDeleteMatRequest()
 	{ // Getting MaterialID from user input and delete that tuple from Material table 
 		global $db_conn;
-		
+
 		$tuple = array(
 			":bind1" => $_POST['mid']
 		);
@@ -500,15 +506,21 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			$tuple
 		);
 
-		$result = executeBoundSQL("DELETE FROM Material WHERE MaterialID = :bind1", $alltuples);
-		oci_commit($db_conn);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Material WHERE MaterialID = :bind1", $alltuples);
+		$counter = oci_fetch_row($check["statement"])[0];
 
-		if ($result["success"] == TRUE) {
-			echo "<p><font color=green> <b>SUCCESS</b>: Deleted a resource :)</font></p>";
+		if($counter > 0) {
+			$result = executeBoundSQL("DELETE FROM Material WHERE MaterialID = :bind1", $alltuples);
+			oci_commit($db_conn);
+
+			if ($result["success"] == TRUE) {
+				echo "<p><font color=green> <b>SUCCESS</b>: Deleted a resource :)</font></p>";
+			} else {
+				echo "<p><font color=red> <b>ERROR</b>: Check that your're deleting the right MaterialID. Try again!</font><p>";
+			}
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: Check that your're deleting the right MaterialID. Try again!</font><p>";
+			echo "<p><font color=red><b>Check that the MaterialID you want to delete is in the list of Materials :)</b></font><p>";
 		}
-		//TODO: look into error handling so if user deletes a MaterialID that doesn't exist there will be an error message. Same as above - deleting a tuple that doesn't exist will just return
 	}
 
 	// HANDLE ALL POST ROUTES
