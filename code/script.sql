@@ -439,17 +439,20 @@ INSERT INTO Forum4(URL, Status, Title) VALUES ('http://example.com/french-in-can
 INSERT INTO Forum4(URL, Status, Title) VALUES ('http://example.com/language-learning-book-club', 'Active', 'Language Learning Book Club');
 INSERT INTO Forum4(URL, Status, Title) VALUES ('http://example.com/german-speaking-community', 'Active', 'German Speaking Community');
 
+INSERT INTO Achievement1(RewardID, RewardName) VALUES (50, 'Initiator');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (51, 'Gold Medal');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (52, 'Silver Medal');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (53, 'Bronze Medal');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (54, 'Certificate of Achievement');
 INSERT INTO Achievement1(RewardID, RewardName) VALUES (55, 'Badge of Honor');
 
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (40, 'Learning Enthusiast', 'Start Your Learning Journey', 50);
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (41, 'Completionist', 'Complete all exercises', 54);
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (42, 'Master Speaker', 'Complete all pronunciation challenges', 51);
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (43, 'Language Pro', 'Achieve fluency in a language', 55);
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (44, 'Beginner Language Guru', 'Complete Beginner Language Requirements', 52);
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (45, 'Bookworm', 'Read 100 books', 53); 
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (45, 'Bookworm', 'Read 100 books', 53);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (46, 'New Language Leaner', 'Start a new Language', 50);
 
 INSERT INTO Book(MaterialID, Author) VALUES (11, 'John Doe');
 INSERT INTO Book(MaterialID, Author) VALUES (12, 'Gabriel Martinez');
@@ -503,6 +506,18 @@ INSERT INTO Participates(UserID, URL) VALUES (2, 'http://example.com/french-in-c
 INSERT INTO Participates(UserID, URL) VALUES (3, 'http://example.com/french-in-canada');
 INSERT INTO Participates(UserID, URL) VALUES (4, 'http://example.com/language-learning-book-club'); 
 
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (1, 40, '01-SEP-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 40, '11-FEB-20');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (3, 40, '12-MAR-22');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (4, 40, '08-NOV-21');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 40, '29-OCT-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (6, 40, '11-DEC-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (1, 46, '01-SEP-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 46, '21-SEP-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (3, 46, '12-OCT-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (4, 46, '10-APR-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 46, '11-DEC-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (6, 46, '11-DEC-23');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (1, 41, '01-SEP-23');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 42, '11-FEB-20');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 43, '12-MAR-22');
