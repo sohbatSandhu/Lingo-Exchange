@@ -135,7 +135,7 @@ $expert = $_SESSION['expert'];
 	<p>VIEW ALL PROVIDED LANGUAGES AND DIALECT COMBINATIONS TO START LEARINING</p>
 	<form method="GET" action="home.php">
 		<input type="hidden" id="viewLanguageRequest" name="viewLanguageRequest"> 
-		<input type="submit" value="Show All Languages Provided"> <br /><br />
+		<input type="submit" value="Show All Languages Provided">
 	</form>
 
 	<hr style="border: 1px dashed gray;" />
@@ -144,7 +144,7 @@ $expert = $_SESSION['expert'];
 	<form method="GET" action="home.php">
 		<input type="hidden" id="viewMinDialectsLanguageRequest" name="viewMinDialectsLanguageRequest">
 		Minimum Number of Dialects: <input type="number" name="minDia" min="0"> <br /><br />
-		<input type="submit" value="Show Languages"> <br /><br />
+		<input type="submit" value="Show Languages">
 	</form>
 
 	<hr style="border: 1px dashed gray;" />
@@ -168,7 +168,7 @@ $expert = $_SESSION['expert'];
 	<p>VIEW ALL LANGUAGES AND DIALECT COMBINATIONS CURRENTLY LEARNING</p>
 	<form method="GET" action="home.php">
 		<input type="hidden" id="viewCurrentLanguageRequest" name="viewCurrentLanguageRequest">
-		<input type="submit" value="View Current Languages"></p>
+		<input type="submit" value="View Current Languages">
 	</form>
 
 	<hr style="border: 1px dashed gray;" />
@@ -192,6 +192,14 @@ $expert = $_SESSION['expert'];
 	<form method="GET" action="home.php">
 		<input type="hidden" id="viewAchievementsRequest" name="viewAchievementsRequest"> 
 		<input type="submit" value="Show All Achievements">
+	</form>
+
+	<hr style="border: 1px dashed gray;" />
+
+	<p>VIEW NUMBER OF ACHIEVEMENTS EARNED FOR A REWARD</p>
+	<form method="GET" action="home.php">
+		<input type="hidden" id="viewAchievementNumbersRequest" name="viewAchievementNumbersRequest">
+		<input type="submit" value="View Achievement Count">
 	</form>
 
 	<hr />
@@ -406,6 +414,30 @@ $expert = $_SESSION['expert'];
 		echo "</table>";
 	}
 
+	function printAchievementNumbers($result)
+	{	// prints all achieved rewards 
+		echo "<br>Retrieved User's Reward Count:<br>";
+		echo "<table>";
+		echo "<tr>
+				<th>Reward Name</th>
+				<th>Number Earned</th>
+			</tr>";
+		$count = 0; // counter to check the number of tuples extracted from $result
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			echo "<tr>
+					<td>" . $row[0] . "</td>
+					<td>" . $row[1] . "</td>
+				</tr>";
+			$count = $count + 1;
+		}
+
+		if ($count == 0) {
+			echo "<p><font color=red> <b>ERROR</b>: No Achievements Found</font><p>";
+		}
+
+		echo "</table>";
+	}
+
 	function handleUpdateUserRequest() 
 	{
 		global $db_conn, $userID, $userName, $age, $password;
@@ -590,6 +622,27 @@ $expert = $_SESSION['expert'];
 		printAchievements($result["statement"]);
 	}
 
+	function handleViewAchievementNumbersRequest()
+	{
+		global $db_conn, $userID;
+
+		$tuple = array(
+			":bind1" => $userID
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$result = executeBoundSQL(
+			"SELECT A1.RewardName, COUNT(E.ReceivalDate)
+			FROM Achievement1 A1, Achievement2 A2, Earns E
+			WHERE A1.RewardID = A2.RewardID AND A2.AchievementID = E.AchievementID AND E.UserID=:bind1
+			GROUP BY A1.RewardName" , $alltuples);
+		
+		printAchievementNumbers($result["statement"]);
+	}
+
 	function handleDeleteUserRequest()
 	{
 		global $db_conn, $userID;
@@ -603,7 +656,7 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 
-		executePlainSQL("DELETE FROM Learner_Consults WHERE UserID='" . $userID . "'");
+		executePlainSQL("DELETE FROM Learner_Consults WHERE UserID=:bind1");
 		oci_commit($db_conn);
 		session_destroy();
 	}
@@ -663,6 +716,8 @@ $expert = $_SESSION['expert'];
 				handleDisplayMinDialectsLanguageRequest();
 			} elseif (array_key_exists('viewAchievementsRequest', $_GET)) {
 				handleViewAchievementsRequest();
+			} elseif (array_key_exists('viewAchievementNumbersRequest', $_GET)) {
+				handleViewAchievementNumbersRequest();
 			}
 
 			disconnectFromDB();
@@ -671,7 +726,7 @@ $expert = $_SESSION['expert'];
 
 	if (isset($_POST['updateUser']) || isset($_POST['addLanguage']) || isset($_POST['removeLanguage']) || isset($_POST['logoutUser']) || isset($_POST['deleteAccount'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest']) || isset($_GET['viewAchievementsRequest'])) {
+	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest']) || isset($_GET['viewAchievementsRequest']) || isset($_GET['viewAchievementNumbersRequest'])) {
 		handleGETRequest();
 	}
 	// End PHP parsing and send the rest of the HTML content
