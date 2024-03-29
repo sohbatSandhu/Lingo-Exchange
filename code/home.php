@@ -494,7 +494,7 @@ $expert = $_SESSION['expert'];
 	
 	function handleAddLanguageRequest()
 	{
-		global $db_conn, $userID;
+		global $db_conn, $userID, $userName;
 
 		// Checking Missing Values required for Language Addition
 		if (empty($_POST['addLang']) || empty($_POST['addDialect'])) {
@@ -531,7 +531,7 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 		executeBoundSQL("INSERT INTO Learns VALUES (:bind1, :bind2, :bind3, TO_DATE(:bind4, 'YYYY-MM-DD'))", $alltuples);
-		echo "<p><font color=green> <b>SUCCESS</b>: Added " . $checkLang . " Language with " . $checkDial . " dialect to USER " . $userID . " languagues successfully on " . $startDate . " !</font><p>";
+		echo "<p><font color=green> <b>SUCCESS</b>: Added " . $checkLang . " Language with " . $checkDial . " dialect to " . $userName . "'s languages successfully on " . $startDate . " !</font><p>";
 		oci_commit($db_conn);
 	}
 
@@ -608,6 +608,26 @@ $expert = $_SESSION['expert'];
 		session_destroy();
 	}
 
+	function addLanguageAchievement()
+	{
+		global $db_conn, $userID;
+
+		$startDate = date("Y-m-d", time());
+
+		$tuple = array(
+			":bind1" => $userID,
+			":bind2" => '46',
+			":bind3" => $startDate
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		executeBoundSQL("INSERT INTO Earns VALUES (:bind1, :bind2, TO_DATE(:bind3, 'YYYY-MM-DD'))", $alltuples);
+		oci_commit($db_conn);
+	}
+
 	// HANDLE ALL POST ROUTES
 	function handlePOSTRequest()
 	{
@@ -616,6 +636,7 @@ $expert = $_SESSION['expert'];
 				handleUpdateUserRequest();
 			} else if (array_key_exists('addLanguage', $_POST)) {
 				handleAddLanguageRequest();
+				addLanguageAchievement();
 			} else if (array_key_exists('removeLanguage', $_POST)) {
 				handleRemoveLanguageRequest();
 			} else if (array_key_exists('logoutRequest', $_POST)) {
