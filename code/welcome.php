@@ -30,8 +30,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
+$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -226,10 +226,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 			echo "<p><font color=red> <b>ERROR</b>: User Name already in use. Please Select a new and unique User Name</font><p>";
 			return;
 		}
-
+		$id = time();
 		//Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => time(),
+			":bind1" => $id,
 			":bind2" => $_POST['insName'],
 			":bind3" => $_POST['insAge'],
 			":bind4" => $_POST['insPassword'], 
@@ -241,6 +241,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		);
 
 		executeBoundSQL("INSERT INTO Learner_Consults values (:bind1, :bind2, :bind3, :bind4, :bind5)", $alltuples);
+		addCreationAchievement($id);
 		echo "<p><font color=green> <b>SUCCESS</b>: Account Created Successfully!</font><p>";
 		oci_commit($db_conn);
 	}
@@ -275,13 +276,32 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		}
 	}
 
+	function addCreationAchievement($id)
+	{
+		global $db_conn;
+
+		$startDate = date("Y-m-d", time());
+
+		$tuple = array(
+			":bind1" => $id,
+			":bind2" => '40',
+			":bind3" => $startDate
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		executeBoundSQL("INSERT INTO Earns VALUES (:bind1, :bind2, TO_DATE(:bind3, 'YYYY-MM-DD'))", $alltuples);
+		oci_commit($db_conn);
+	}
+
 	// HANDLE ALL POST ROUTES
 	function handlePOSTRequest()
 	{
 		if (connectToDB()) {
 			if (array_key_exists('insertQueryRequest', $_POST)) {
 				handleInsertRequest();
-				// TODO: Achievement UPDATES
 			} else if (array_key_exists('accessAccountRequest', $_POST)) {
 				handleAccessRequest();
 			}
