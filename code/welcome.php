@@ -293,6 +293,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 		);
 
 		executeBoundSQL("INSERT INTO Earns VALUES (:bind1, :bind2, TO_DATE(:bind3, 'YYYY-MM-DD'))", $alltuples);
+		echo "<p><font color=green> <b>SUCCESS</b>: Earned Learning Enthusiast! Congratulations on taking the first for this immersive and enriching journey.</font><p>";
 		oci_commit($db_conn);
 	}
 
