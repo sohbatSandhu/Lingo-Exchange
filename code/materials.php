@@ -27,6 +27,21 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 // The next tag tells the web server to stop parsing the text as PHP. Use the
 // pair of tags wherever the content switches to PHP
+
+session_start();
+
+if (empty($_SESSION)) { //check if $_SESSION is empty
+	header('Location: welcome.php'); 
+	exit;
+} 
+
+//set logged in user information
+$userID = $_SESSION['userID'];
+$userName = $_SESSION['userName'];
+$age = $_SESSION['age'];
+$password = $_SESSION['password'];
+$expert = $_SESSION['expert'];
+
 ?>
 
 <html>
@@ -490,7 +505,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct :)</font><p>";
 			}
 		} else {
-			echo "<p><font color=red><b>Check that the MaterialID you want to update is in the list of Materials :)</b></font><p>";
+			echo "<p><font color=grey><b>This MaterialID doesn't exist :( Check the list of Materials for the correct ID.</b></font><p>";
 		} 
 	}
 
@@ -519,7 +534,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 				echo "<p><font color=red> <b>ERROR</b>: Check that your're deleting the right MaterialID. Try again!</font><p>";
 			}
 		} else {
-			echo "<p><font color=red><b>Check that the MaterialID you want to delete is in the list of Materials :)</b></font><p>";
+			echo "<p><font color=grey><b>This MaterialID doesn't exist :( Check the list of Materials for the correct ID.</b></font><p>";
 		}
 	}
 
