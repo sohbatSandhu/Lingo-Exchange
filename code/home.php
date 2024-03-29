@@ -186,6 +186,16 @@ $expert = $_SESSION['expert'];
 	</form>
 
 	<hr />
+
+	<h2>Achievements</h2>
+	<p>VIEW ALL ACHIEVEMENTS EARNED</p>
+	<form method="GET" action="home.php">
+		<input type="hidden" id="viewAchievementsRequest" name="viewAchievementsRequest"> 
+		<input type="submit" value="Show All Achievements">
+	</form>
+
+	<hr />
+
 	<hr style="border: 1px dashed gray;" />
 
 	<?php
@@ -368,6 +378,34 @@ $expert = $_SESSION['expert'];
 		echo "</table>";
 	}
 
+	function printAchievements($result)
+	{	// prints all achieved rewards 
+		echo "<br>Retrieved User's Achievements:<br>";
+		echo "<table>";
+		echo "<tr>
+				<th>Achievement Name</th>
+				<th>Achievement Description</th>
+				<th>Reward Name</th>
+				<th>Receival Date</th>
+			</tr>";
+		$count = 0; // counter to check the number of tuples extracted from $result
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			echo "<tr>
+					<td>" . $row[0] . "</td>
+					<td>" . $row[1] . "</td>
+					<td>" . $row[2] . "</td>
+					<td>" . $row[3] . "</td>
+				</tr>";
+			$count = $count + 1;
+		}
+
+		if ($count == 0) {
+			echo "<p><font color=red> <b>ERROR</b>: No Achievements Found</font><p>";
+		}
+
+		echo "</table>";
+	}
+
 	function handleUpdateUserRequest() 
 	{
 		global $db_conn, $userID, $userName, $age, $password;
@@ -539,6 +577,19 @@ $expert = $_SESSION['expert'];
 		printLanguages($result["statement"]);
 	}
 
+	function handleViewAchievementsRequest()
+	{
+		global $db_conn, $userID;
+
+		$result = executePlainSQL(
+			"SELECT A2.AchievementName, A2.AchievementDescription, A1.RewardName, E.ReceivalDate
+			FROM Achievement1 A1, Achievement2 A2, Earns E
+			WHERE A1.RewardID = A2.RewardID AND A2.AchievementID = E.AchievementID AND E.UserID='" . $userID . "'"
+		);
+		
+		printAchievements($result["statement"]);
+	}
+
 	function handleDeleteUserRequest()
 	{
 		global $db_conn, $userID;
@@ -589,6 +640,8 @@ $expert = $_SESSION['expert'];
 				handleDisplayCurrentLanguageRequest();
 			} elseif (array_key_exists('viewMinDialectsLanguageRequest', $_GET)) {
 				handleDisplayMinDialectsLanguageRequest();
+			} elseif (array_key_exists('viewAchievementsRequest', $_GET)) {
+				handleViewAchievementsRequest();
 			}
 
 			disconnectFromDB();
@@ -597,7 +650,7 @@ $expert = $_SESSION['expert'];
 
 	if (isset($_POST['updateUser']) || isset($_POST['addLanguage']) || isset($_POST['removeLanguage']) || isset($_POST['logoutUser']) || isset($_POST['deleteAccount'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest'])) {
+	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest']) || isset($_GET['viewAchievementsRequest'])) {
 		handleGETRequest();
 	}
 	// End PHP parsing and send the rest of the HTML content
