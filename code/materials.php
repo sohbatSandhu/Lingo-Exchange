@@ -256,7 +256,7 @@ $expert = $_SESSION['expert'];
 
 	function printAllMaterials($result)
 	{ //prints all resources from a select statement
-		echo "<br>Study Materials:<br>";
+		echo "<br>All study materials offered:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
@@ -276,7 +276,7 @@ $expert = $_SESSION['expert'];
 
 	function printAllBooks($result)
 	{ //prints all resources that are books from a select statement
-		echo "<br>Books:<br>";
+		echo "<br>All books offered:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
@@ -296,7 +296,7 @@ $expert = $_SESSION['expert'];
 
 	function printAllApps($result)
 	{ //prints all resources that are apps from a select statement
-		echo "<br>Apps:<br>";
+		echo "<br>All apps offered:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
@@ -316,7 +316,7 @@ $expert = $_SESSION['expert'];
 
 	function printAllWebsites($result)
 	{ //prints all resources that are websites from a select statement
-		echo "<br>Websites:<br>";
+		echo "<br>All websites offered:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>MaterialID</th>
@@ -529,7 +529,7 @@ $expert = $_SESSION['expert'];
 			oci_commit($db_conn);
 
 			if ($result["success"] == TRUE) {
-				echo "<p><font color=green> <b>SUCCESS</b>: Deleted a resource :)</font></p>";
+				echo "<p><font color=green> <b>SUCCESS</b>: Removed a resource :)</font></p>";
 			} else {
 				echo "<p><font color=red> <b>ERROR</b>: Check that your're deleting the right MaterialID. Try again!</font><p>";
 			}
