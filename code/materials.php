@@ -396,7 +396,7 @@ $expert = $_SESSION['expert'];
 		if ($result["success"] == TRUE && $matResult["success"] == TRUE) {
 			echo "<p><font color=green> <b>SUCCESS</b>: Added a new book :)</font></p>";
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct (it shouldn't exist in the list of resources) :)</font><p>";
+			echo "<p><font color=red> <b>ERROR</b>: Check that the MaterialID is correct (it shouldn't exist in the list of resources)</font><p>";
 		}
 	}
 
@@ -435,7 +435,7 @@ $expert = $_SESSION['expert'];
 		if ($result["success"] == TRUE && $matResult["success"] == TRUE) {
 			echo "<p><font color=green> <b>SUCCESS</b>: Added a new app :)</font></p>";
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct (it shouldn't exist in the list of resources) :)</font><p>";
+			echo "<p><font color=red> <b>ERROR</b>: Check that the MaterialID is correct (it shouldn't exist in the list of resources)</font><p>";
 		}
 	}
 
@@ -474,7 +474,7 @@ $expert = $_SESSION['expert'];
 		if ($result["success"] == TRUE && $matResult["success"] == TRUE) {
 			echo "<p><font color=green> <b>SUCCESS</b>: Added a new website :)</font></p>";
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct (it shouldn't exist in the list of resources) :)</font><p>";
+			echo "<p><font color=red> <b>ERROR</b>: Check that the MaterialID is correct (it shouldn't exist in the list of resources)</font><p>";
 		}
 	}
 
@@ -502,7 +502,7 @@ $expert = $_SESSION['expert'];
 			if ($result["success"] == TRUE) {
 				echo "<p><font color=green> <b>SUCCESS</b>: Updated a study material :)</font></p>";
 			} else {
-				echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct :)</font><p>";
+				echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the MaterialID is correct.</font><p>";
 			}
 		} else {
 			echo "<p><font color=grey><b>This MaterialID doesn't exist :( Check the list of Materials for the correct ID.</b></font><p>";
