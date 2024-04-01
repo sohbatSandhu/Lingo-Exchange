@@ -73,7 +73,7 @@ $expert = $_SESSION['expert'];
 	</form> 
 	<hr />
 
-	<h2>Question</h2>
+	<h2>View Questions</h2>
 	<p>Select the name of the exercise you want to work on.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="displayQuestionRequest" name="displayQuestionRequest">
@@ -174,7 +174,7 @@ $expert = $_SESSION['expert'];
 	<hr />
 
 	<h2>Count Points Above Average</h2>
-	<p>Show the number of times you got more points than the average points obtained for each language.</p>
+	<p>View all the languages you completed exercises for and calculate the count of exercises which award points above average.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="countPointsRequest" name="countPointsRequest">
 		<input type="submit" value="Calculate" name="countPoints"></p>
@@ -297,6 +297,7 @@ $expert = $_SESSION['expert'];
 			<th>ExerciseNumber</th>
 			<th>Purpose</th>
 			<th>TimeLimit</th>
+			<th>Points</th>
 		</tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
@@ -305,6 +306,7 @@ $expert = $_SESSION['expert'];
 				<td>" . $row[1] . "</td>
 				<td>" . $row[2] . "</td>
 				<td>" . $row[3] . "</td>  
+				<td>" . $row[4] . "</td>  
 			</tr>"; 
 		}
 		echo "</table>";
@@ -315,12 +317,18 @@ $expert = $_SESSION['expert'];
 		echo "<br>Questions<br>";
 		echo "<table>";
 		echo "<tr>
+			<th>ExerciseName</th>
+			<th>ExerciseNumber</th>
 			<th>QuestionName</th>
+			<th>Type</th>
 		</tr>";
 
 		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 			echo "<tr>
 				<td>" . $row[0] . "</td>
+				<td>" . $row[1] . "</td>
+				<td>" . $row[2] . "</td>
+				<td>" . $row[3] . "</td>
 			</tr>"; 
 		}
 		echo "</table>";
@@ -422,7 +430,7 @@ $expert = $_SESSION['expert'];
 	function handleDisplayExercisesRequest()
 	{
 		global $db_conn;
-		$result = executePlainSQL("SELECT e4.ExerciseName, e4.ExerciseNumber, e1.Purpose, e3.TimeLimit
+		$result = executePlainSQL("SELECT e4.ExerciseName, e4.ExerciseNumber, e1.Purpose, e3.TimeLimit, e4.Points
 								   FROM Exercise4 e4, Exercise1 e1, Exercise3 e3
 								   WHERE e4.ExerciseName = e1.ExerciseName
 								   AND e1.ExerciseName = e3.ExerciseName");
@@ -446,7 +454,7 @@ $expert = $_SESSION['expert'];
 		$counter = oci_fetch_row($check["statement"])[0];
 
 		if ($counter > 0) {
-			$result = executeBoundSQL("SELECT QuestionName FROM Question_Has
+			$result = executeBoundSQL("SELECT * FROM Question_Has
 								   	   WHERE ExerciseName = :bind1
 								   	   AND ExerciseNumber = :bind2", $alltuples);
 			oci_commit($db_conn);
@@ -519,7 +527,7 @@ $expert = $_SESSION['expert'];
 			if ($result["success"] == TRUE) {
 				displayCompleted($result["statement"]);
 			} else {
-				echo "<p><font color=red> <b>ERROR</b>: Try again! Check that the userID is correct</font><p>";
+				echo "<p><font color=red> <b>ERROR</b>: Try again!</font><p>";
 			}
 		} else {
 			echo "<p><b>You haven't completed any exercises yet!</b><p>";
