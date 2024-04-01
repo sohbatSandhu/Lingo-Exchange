@@ -52,7 +52,7 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 
 	<h1 style="text-align:center">Welcome to Language Learning Platform</h1>
 	<h3 style="text-align:center">
-		<font color="purple">CATCHY APP NAME</font> aspires to provide an engaging online environment that allows users to comprehensively learn new languages with fellow passionate learners while being assisted by various learning resources. 
+		<font color="purple">LINGO EXCHANGE</font> aspires to provide an engaging online environment that allows users to comprehensively learn new languages with fellow passionate learners while being assisted by various learning resources. 
 		<br>
 		Our focus extends beyond mere language acquisition - we strive to facilitate a comprehensive language learning journey. 
 	</h3>
