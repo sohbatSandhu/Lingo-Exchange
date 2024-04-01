@@ -146,7 +146,7 @@ $expert = $_SESSION['expert'];
 	<hr />
 
 	<h2>View Completed Exercises</h2>
-	<p>View all your completed exercises</p>
+	<p>View all your completed exercises.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="displayCompletedRequest" name="displayCompletedRequest">
 		<p><input type="submit" value="See Completed" name="displayCompleted"></p>
@@ -290,7 +290,7 @@ $expert = $_SESSION['expert'];
 
 	function displayExercises($result)
 	{ //prints all exercises from a select statement
-		echo "<br>Exercises<br>";
+		echo "<br>All exercises offered:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>ExerciseName</th>
@@ -314,7 +314,7 @@ $expert = $_SESSION['expert'];
 
 	function displayQuestion($result) 
 	{ //prints questions for each exercise from a select statement
-		echo "<br>Questions<br>";
+		echo "<br>Questions:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>ExerciseName</th>
@@ -338,7 +338,7 @@ $expert = $_SESSION['expert'];
 
 	function displayCompleted($result) 
 	{ //prints completed exercises for a user from a select statement
-		echo "<br>Completed Exercises<br>";
+		echo "<br>Completed Exercises:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>ExerciseName</th>
@@ -358,7 +358,7 @@ $expert = $_SESSION['expert'];
 
 	function displayMax($result)
 	{ //prints the maximum score for each language using aggregation and group by
-		echo "<br>Maximum Points<br>";
+		echo "<br>Maximum Points:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>LanguageName</th>
@@ -376,7 +376,7 @@ $expert = $_SESSION['expert'];
 
 	function displayMin($result)
 	{ //prints the minimum score for each language using aggregation and group by
-		echo "<br>Minimum Points<br>";
+		echo "<br>Minimum Points:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>LanguageName</th>
@@ -394,7 +394,7 @@ $expert = $_SESSION['expert'];
 
 	function displayAvg($result)
 	{ //prints the average score for each language using aggregation and group by
-		echo "<br>Average Points<br>";
+		echo "<br>Average Points:<br>";
 		echo "<table>";
 		echo "<tr>
 			<th>LanguageName</th>
