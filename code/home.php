@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
+$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -73,11 +73,11 @@ $expert = $_SESSION['expert'];
 	
 	<hr />
 
-	<h2> Edit Profile </h2>
+	<h2> Edit Profile (UserID: <?php global $userID; echo htmlspecialchars($userID); ?>)</h2>
 	<p>
-		Edit Account Information for <b>UserID: <?php global $userID; echo htmlspecialchars($userID); ?></b>
-		<br>
 		Update the attributes you want to update by specifing the desired attribute value under the <b>New Information</b> column.
+		<br>
+		To update assined expert, check the checkbox to redirect to Expert Management Page after clicking Update Information. If still not redirecting, edit experts using the "Manage Experts" button in <b>Navigation</b> below.
 		<br>
 		Leave the attribute value blank if you do not want to update that attribute.
 		<br>
@@ -91,16 +91,14 @@ $expert = $_SESSION['expert'];
 			<tr><td>Age (Between 1 and 150)</td><th> <?php global $age; echo htmlspecialchars($age); ?> </th><td><input type="number" name="newAge" min="1" max="150"></td></tr>
 			<tr><td>Password</td><th> <?php global $password; echo htmlspecialchars($password); ?> </th><td><input type="text" name="newPassword"></td></tr>
 			<tr><td>Expert Assigned</td><th> <?php global $expert; echo (isset($expert)) ? htmlspecialchars($expert) : "Not Assigned"; ?> 	</th><td>
-								<form method="POST" action="experts.php">
-									<input type="hidden" id="expertNavRequest" name="expertNavRequest">
-									<input type="submit" value="Edit Assigned Expert">
-								</form>
+								<input type="checkbox" id="editExpert" name="editExpert" value="true">
+								<label for="editExpert"> Edit Expert</label>
 							</td></tr>
 		</table> <br/>
 		<input type="submit" value="Update Information" name="updateUser">
 	</form>
 	<form method="POST" action="welcome.php">
-		<input type="hidden" id="logoutRequest" name="logoutRequest"> <br>
+		<input type="hidden" id="logoutRequest" name="logoutRequest">
 		<input type="submit" value="LOGOUT" name="logoutUser">
 	</form>
 	<form method="POST" action="home.php">
@@ -445,6 +443,7 @@ $expert = $_SESSION['expert'];
 		$newName = $_POST['newUserName'];
 		$newAge = $_POST['newAge'];
 		$newPassword = $_POST['newPassword'];
+		$editExpert = $_POST['editExpert'];
 
 		// Identify blanks for no change
 		if (empty($_POST['newUserName'])) {
@@ -475,12 +474,17 @@ $expert = $_SESSION['expert'];
 			WHERE UserID='$userID'"
 		);
 
-		// TODO: refreshing page fn...
-
 		$_SESSION["userName"] = $newName;
 		$_SESSION["password"] = $newPassword;
 		$_SESSION["age"] = $newAge;		
 		oci_commit($db_conn);
+
+		// Redirect to experts page to update information
+		if ($editExpert != "true") {
+			header("Refresh:0; url=home.php");
+		} else {
+			header("Location: experts.php");
+		}
 	}
 
 	function handleRemoveLanguageRequest() 
