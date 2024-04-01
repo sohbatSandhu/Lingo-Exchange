@@ -112,7 +112,7 @@ $expert = $_SESSION['expert'];
 
 	<h2>Navigation</h2>
 	<p>NAVIGATE TO OTHER PAGES FOR LANGUAGE LEARNING</p>
-	<form method="POST" action="exercises.php">
+	<form method="POST" action="exercise.php">
 		<input type="hidden" id="excerciseNavRequest" name="excerciseNavRequest">
 		<input type="submit" value="Practice Exercises">
 	</form>
