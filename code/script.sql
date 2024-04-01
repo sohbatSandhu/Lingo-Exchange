@@ -98,7 +98,7 @@ CREATE TABLE Exercise3(
 CREATE TABLE Exercise4(
 	ExerciseName   VARCHAR(50),
 	ExerciseNumber INTEGER,
-    Points		   REAL,
+    Points		   INTEGER,
     PRIMARY KEY (ExerciseName, ExerciseNumber),
     FOREIGN KEY (ExerciseName) REFERENCES Exercise1
 	    ON DELETE CASCADE
