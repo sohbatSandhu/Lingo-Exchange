@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
+$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -134,6 +134,15 @@ $expert = $_SESSION['expert'];
 	<form method="GET" action="home.php">
 		<input type="hidden" id="viewLanguageRequest" name="viewLanguageRequest"> 
 		<input type="submit" value="Show All Languages Provided">
+	</form>
+
+	<hr style="border: 1px dashed gray;" />
+
+	<p>VIEW ALL PROVIDED LANGUAGE NAMES HAVING SPECIFIED MINIMUM NUMBER OF CHARACTERS</p>
+	<form method="GET" action="home.php">
+		<input type="hidden" id="viewMinCharsLanguageRequest" name="viewMinCharsLanguageRequest">
+		Minimum Number of Characters: <input type="number" name="minChars" min="0"> <br /><br />
+		<input type="submit" value="Show Languages">
 	</form>
 
 	<hr style="border: 1px dashed gray;" />
@@ -334,6 +343,32 @@ $expert = $_SESSION['expert'];
 		echo "</table>";
 	}
 
+	function printMinCharsLanguages($result)
+	{
+		echo "<br>Retrieved Provided Languages with minimum of " . $_GET["minChars"] . " Characters: <br>";
+		echo "<table>";
+		echo "<tr>
+				<th>Language Name</th>
+				<th>Dialect</th>
+				<th>Number of Characters</th>
+			</tr>";
+		$count = 0;
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			echo "<tr>
+					<td>" . $row[0] . "</td>
+					<td>" . $row[1] . "</td>
+					<td>" . $row[2] . "</td>
+				</tr>";
+			$count = $count + 1;
+		}
+
+		echo "</table>";
+
+		if ($count == 0) {
+			echo "<p><font color=red> <b>ERROR</b>: No Languages found with a Minimum of " . $_GET["minChars"] . " Characters</font><p>";
+		}
+	}
+
 	function printMinDialectsLanguages($result)
 	{	// prints languages with minimum number of dialects
 		echo "<br>Retrieved Languages with a Minimum of " . $_GET["minDia"] . " Dialects:<br>";
@@ -351,11 +386,12 @@ $expert = $_SESSION['expert'];
 			$count = $count + 1;
 		}
 
+		echo "</table>";
+
 		if ($count == 0) {
 			echo "<p><font color=red> <b>ERROR</b>: No Languages found with a Minimum of " . $_GET["minDia"] . " Dialects</font><p>";
 		}
 
-		echo "</table>";
 	}
 
 	function printSelectedLanguages($result)
@@ -376,12 +412,12 @@ $expert = $_SESSION['expert'];
 				</tr>";
 			$count = $count + 1;
 		}
-
+		echo "</table>";
+		
 		if ($count == 0) {
 			echo "<p><font color=red> <b>ERROR</b>: No Currently Selected Languages. Retry after selecting languages</font><p>";
 		}
 
-		echo "</table>";
 	}
 
 	function printAchievements($result)
@@ -405,11 +441,11 @@ $expert = $_SESSION['expert'];
 			$count = $count + 1;
 		}
 
+		echo "</table>";
+
 		if ($count == 0) {
 			echo "<p><font color=red> <b>ERROR</b>: No Achievements Found</font><p>";
 		}
-
-		echo "</table>";
 	}
 
 	function printAchievementNumbers($result)
@@ -585,6 +621,22 @@ $expert = $_SESSION['expert'];
 		);
 		printMinDialectsLanguages($result["statement"]);
 	}
+
+	function handleDisplayMinCharsLanguageRequest()
+	{
+		global $db_conn;
+
+		$minChars = $_GET["minChars"];
+
+		$result = executePlainSQL(
+			"SELECT L2.LanguageName, L2.Dialect, L1.NumChars 
+			FROM Language1 L1 
+			INNER JOIN Language2 L2 
+			ON L1.LanguageName = L2.LanguageName
+			WHERE L1.NumChars >= '" . $minChars . "'"
+		);
+		printMinCharsLanguages($result["statement"]);
+	}
 	
 	function handleDisplayCurrentLanguageRequest()
 	{
@@ -722,6 +774,8 @@ $expert = $_SESSION['expert'];
 				handleViewAchievementsRequest();
 			} elseif (array_key_exists('viewAchievementNumbersRequest', $_GET)) {
 				handleViewAchievementNumbersRequest();
+			} elseif (array_key_exists('viewMinCharsLanguageRequest', $_GET)) {
+				handleDisplayMinCharsLanguageRequest();
 			}
 
 			disconnectFromDB();
@@ -730,7 +784,7 @@ $expert = $_SESSION['expert'];
 
 	if (isset($_POST['updateUser']) || isset($_POST['addLanguage']) || isset($_POST['removeLanguage']) || isset($_POST['logoutUser']) || isset($_POST['deleteAccount'])) {
 		handlePOSTRequest();
-	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest']) || isset($_GET['viewAchievementsRequest']) || isset($_GET['viewAchievementNumbersRequest'])) {
+	} else if (isset($_GET['viewLanguageRequest']) || isset($_GET['viewCurrentLanguageRequest']) || isset($_GET['viewMinDialectsLanguageRequest']) || isset($_GET['viewAchievementsRequest']) || isset($_GET['viewAchievementNumbersRequest']) || isset($_GET['viewMinCharsLanguageRequest'])) {
 		handleGETRequest();
 	}
 	// End PHP parsing and send the rest of the HTML content
