@@ -93,17 +93,17 @@ $expert = $_SESSION['expert'];
 
 		<p>Select the exercise you want to work on.</p>
 		<p><select id="exerciseNum" name="exerciseNum">
-			<option value="61">61</option>
-			<option value="62">62</option>
-			<option value="63">63</option>
-			<option value="64">64</option>
-			<option value="65">65</option>
-			<option value="92">92</option>
-			<option value="93">93</option>
-			<option value="94">94</option>
-			<option value="95">95</option>
-			<option value="96">96</option>
-			<option value="97">97</option>
+			<option value=61>61</option>
+			<option value=62>62</option>
+			<option value=63>63</option>
+			<option value=64>64</option>
+			<option value=65>65</option>
+			<option value=92>92</option>
+			<option value=93>93</option>
+			<option value=94>94</option>
+			<option value=95>95</option>
+			<option value=96>96</option>
+			<option value=97>97</option>
 		</select></p>
 		<input type="submit" value="Show Question" name="displayQuestion">
 	</form>
@@ -112,6 +112,9 @@ $expert = $_SESSION['expert'];
 	<h2>Mark Complete</h2>
 	<form method="POST" action="exercise.php">
 		<input type="hidden" id="markCompleteRequest" name="markCompleteRequest">
+		Language: <input type="text" name="languageName"> <br /><br />
+		Dialect: <input type="text" name="dialect"> <br /><br />
+
 		<p>Select the name of the exercise you completed.</p>
 		<p><select id="exerciseName" name="exerciseName">
 			<option value="Active to Passive Voice English">Active to Passive Voice English</option>
@@ -129,17 +132,17 @@ $expert = $_SESSION['expert'];
 
 		<p>Select the exercise number you completed.</p>
 		<p><select id="exerciseNum" name="exerciseNum">
-			<option value="61">61</option>
-			<option value="62">62</option>
-			<option value="63">63</option>
-			<option value="64">64</option>
-			<option value="65">65</option>
-			<option value="92">92</option>
-			<option value="93">93</option>
-			<option value="94">94</option>
-			<option value="95">95</option>
-			<option value="96">96</option>
-			<option value="97">97</option>
+			<option value=61>61</option>
+			<option value=62>62</option>
+			<option value=63>63</option>
+			<option value=64>64</option>
+			<option value=65>65</option>
+			<option value=92>92</option>
+			<option value=93>93</option>
+			<option value=94>94</option>
+			<option value=95>95</option>
+			<option value=96>96</option>
+			<option value=97>97</option>
 		</select></p>
 		<p><input type="submit" value="Mark Complete" name="markComplete"></p>
 	</form>
@@ -343,6 +346,7 @@ $expert = $_SESSION['expert'];
 		echo "<tr>
 			<th>ExerciseName</th>
 			<th>ExerciseNumber</th>
+			<th>Points</th>
 			<th>CompletionDate</th>
 		</tr>";
 
@@ -351,6 +355,7 @@ $expert = $_SESSION['expert'];
 				<td>" . $row[0] . "</td>
 				<td>" . $row[1] . "</td>
 				<td>" . $row[2] . "</td>
+				<td>" . $row[3] . "</td>
 			</tr>"; 
 		}
 		echo "</table>";
@@ -450,7 +455,7 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 
-		$check = executeBoundSQL("SELECT COUNT(*) FROM Completes WHERE ExerciseName = :bind1 AND ExerciseNumber = :bind2", $alltuples);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Question_Has WHERE ExerciseName = :bind1 AND ExerciseNumber = :bind2", $alltuples);
 		$counter = oci_fetch_row($check["statement"])[0];
 
 		if ($counter > 0) {
@@ -475,23 +480,33 @@ $expert = $_SESSION['expert'];
 		
 		$currDate = date('d-M-Y');
 
+		$tuple0 = array(
+			":bind1" => $_POST['exerciseName'],
+			":bind2" => $_POST['exerciseNum']
+		);
+
+		$alltuples0 = array(
+			$tuple0
+		);
+
 		$tuple = array(
 			":bind1" => $currDate, 
 			":bind2" => $userID,
 			":bind3" => $_POST['exerciseName'],
-			":bind4" => $_POST['exerciseNum']
+			":bind4" => $_POST['exerciseNum'], 
+			":bind5" => $_POST['languageName'],
+			":bind6" => $_POST['dialect']
 		);
 
 		$alltuples = array(
 			$tuple
 		);
 
-		$check = executeBoundSQL("SELECT COUNT(*) FROM Completes WHERE ExerciseName = :bind1 AND ExerciseNumber = :bind2", $alltuples);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Exercise4 WHERE ExerciseName = :bind1 AND ExerciseNumber = TO_NUMBER(:bind2)", $alltuples0);
 		$counter = oci_fetch_row($check["statement"])[0];
 
 		if($counter > 0) {
-			$result = executeBoundSQL("UPDATE Completes SET CompletionDate = :bind1
-								   	   WHERE UserID = :bind2 AND ExerciseName = :bind3 AND ExerciseNumber = :bind4", $alltuples);
+			$result = executeBoundSQL("INSERT INTO Completes VALUES (:bind2, :bind5, :bind6, :bind3, TO_NUMBER(:bind4), :bind1)", $alltuples);
 			oci_commit($db_conn);
 
 			if ($result["success"] == TRUE) {
@@ -520,8 +535,10 @@ $expert = $_SESSION['expert'];
 		$counter = oci_fetch_row($check["statement"])[0];
 
 		if($counter > 0) {
-			$result = executeBoundSQL("SELECT ExerciseName, ExerciseNumber, CompletionDate FROM Completes
-								   	   WHERE UserID = :bind1", $alltuples);
+			$result = executeBoundSQL("SELECT c.ExerciseName, c.ExerciseNumber, Points, CompletionDate FROM Completes c, Exercise4 e4
+								   	   WHERE UserID = :bind1
+									   AND c.ExerciseName = e4.ExerciseName
+									   AND c.ExerciseNumber = e4.ExerciseNumber", $alltuples);
 			oci_commit($db_conn);
 
 			if ($result["success"] == TRUE) {
