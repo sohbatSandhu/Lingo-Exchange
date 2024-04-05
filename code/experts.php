@@ -347,9 +347,7 @@ if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_S
 			printViewMyExpert($result["statement"]);
 		}
 		if ($result["success"] == FALSE) {
-			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show your expert :( <br>
-					 Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
-		}
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show your expert :( <br>";		}
 	}
 
 	function handleViewFilteredExpertsGetRequest()

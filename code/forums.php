@@ -103,15 +103,7 @@ if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_S
 		<table>
 			<tr><th>Attribute Name</th><th>Attribute Value</th></tr>
 			<tr><td>URL</td><td><input type="text" name="url"></td></tr>
-			<tr>
-				<td>Status</td>
-				<td>
-					<select id="status" name="status">
-						<option value="Active">Active</option>
-						<option value="Inactive">Inactive</option>
-					</select>
-				</td>
-			</tr>
+			<tr><td>Status</td><td><input type="text" name="status"></td></tr>
 			<tr><td>Title</td><td><input type="text" name="title"></td></tr>
 		</table>
 		<br>
@@ -302,8 +294,7 @@ if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_S
 			printViewMyForums($result["statement"]);
 		}
 		if ($result["success"] == FALSE) {
-			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show your forums :( <br>
-					 Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to show your forums :( <br>";
 		}
 	}
 
@@ -379,8 +370,8 @@ if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_S
 			echo "<p><font color=green> <b>SUCCESS</b>: Your request was successfully processed :)</font></p>";
 		} else {
 			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to add you to a forum :( <br>
-					Make sure that you've entered a valid User ID (which should be an integer) 
-					and the URL to an <i>existing</i> Forum that you haven't already joined (use our view forums functionality to see what's available).</font><p>";
+					Make sure that you've entered the URL to an <i>existing</i> Forum that you haven't already joined 
+					(use our view forums functionality to see what's available).</font><p>";
 		}
 	}
 	
@@ -406,10 +397,9 @@ if (empty($_SESSION)) { header('Location: welcome.php'); exit; } // Check if $_S
 		$result = executeBoundSQL("DELETE FROM Participates WHERE UserID=:bind1 AND URL=:bind2", $alltuples);
 		oci_commit($db_conn);
 		if ($result["success"] == TRUE) {
-			echo "<p><font color=green> <b>SUCCESS</b>: Your successfully left a forum (if you had joined it to begin with) :)</font></p>";
+			echo "<p><font color=green> <b>SUCCESS</b>: You successfully left a forum (if you had joined it to begin with) :)</font></p>";
 		} else {
-			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to remove you from a forum :( <br>
-					Make sure that you've entered a valid User ID (which should be an integer).</font><p>";
+			echo "<p><font color=red> <b>ERROR</b>: We encountered a problem when trying to remove you from a forum :( <br>";
 		}
 	}
 
