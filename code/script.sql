@@ -98,7 +98,7 @@ CREATE TABLE Exercise3(
 CREATE TABLE Exercise4(
 	ExerciseName   VARCHAR(50),
 	ExerciseNumber INTEGER,
-    Points		   INTEGER,
+    Points		   REAL,
     PRIMARY KEY (ExerciseName, ExerciseNumber),
     FOREIGN KEY (ExerciseName) REFERENCES Exercise1
 	    ON DELETE CASCADE
@@ -452,7 +452,13 @@ INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription,
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (43, 'Language Pro', 'Achieve fluency in a language', 55);
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (44, 'Beginner Language Guru', 'Complete Beginner Language Requirements', 52);
 INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (45, 'Bookworm', 'Read 100 books', 53);
-INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (46, 'New Language Leaner', 'Start a new Language', 50);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (46, 'New Language Leaner', 'Start a new Language: Chinese', 50);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (47, 'New Language Leaner', 'Start a new Language: English', 50);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (48, 'New Language Leaner', 'Start a new Language: French', 50);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (49, 'New Language Leaner', 'Start a new Language: German', 50);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (50, 'New Language Leaner', 'Start a new Language: Korean', 50);
+INSERT INTO Achievement2(AchievementID, AchievementName, AchievementDescription, RewardID) VALUES (51, 'New Language Leaner', 'Start a new Language: Spanish', 50);
+
 
 INSERT INTO Book(MaterialID, Author) VALUES (11, 'John Doe');
 INSERT INTO Book(MaterialID, Author) VALUES (12, 'Gabriel Martinez');
@@ -512,19 +518,18 @@ INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (3, 40, '12-MAR-22
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (4, 40, '08-NOV-21');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 40, '29-OCT-23');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (6, 40, '11-DEC-23');
-INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (1, 46, '01-SEP-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (1, 50, '01-SEP-23');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 46, '21-SEP-23');
-INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (3, 46, '12-OCT-23');
-INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (4, 46, '10-APR-23');
-INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 46, '11-DEC-23');
-INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (6, 46, '11-DEC-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (3, 47, '12-OCT-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (4, 48, '10-APR-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 51, '11-DEC-23');
+INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (6, 49, '11-DEC-23');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (1, 41, '01-SEP-23');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 42, '11-FEB-20');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (2, 43, '12-MAR-22');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (4, 44, '08-NOV-21');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 44, '08-NOV-21');
 INSERT INTO Earns(UserID, AchievementID, ReceivalDate) VALUES (5, 45, '29-OCT-23'); 
-
 
 ------------------------------
 ---ALTER SESSION STATEMENTS---
