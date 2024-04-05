@@ -28,8 +28,8 @@ error_reporting(E_ALL);
 // Set some parameters
 
 // Database access configuration
-$config["dbuser"] = "ora_sohbat";			// change "cwl" to your own CWL
-$config["dbpassword"] = "a79661179";	// change to 'a' + your student number
+$config["dbuser"] = "ora_cwl";			// change "cwl" to your own CWL
+$config["dbpassword"] = "a12345678";	// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = NULL;	// login credentials are used in connectToDB()
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -539,7 +539,7 @@ $expert = $_SESSION['expert'];
 		$result = executePlainSQL(
 			"SELECT COUNT(UserID)
 			FROM Learns
-			WHERE LanguageName = '$checkLang' AND Dialect = '$checkDial'"
+			WHERE LanguageName = '$checkLang' AND Dialect = '$checkDial' AND UserID = $userID"
 		);
 		$row = oci_fetch_row($result["statement"]);
 
@@ -604,6 +604,7 @@ $expert = $_SESSION['expert'];
 		);
 		executeBoundSQL("INSERT INTO Learns VALUES (:bind1, :bind2, :bind3, TO_DATE(:bind4, 'YYYY-MM-DD'))", $alltuples);
 		echo "<p><font color=green> <b>SUCCESS</b>: Added " . $checkLang . " Language with " . $checkDial . " dialect to " . $userName . "'s languages successfully on " . $startDate . " !</font><p>";
+		addLanguageAchievement($checkLang);
 		oci_commit($db_conn);
 	}
 
@@ -717,23 +718,44 @@ $expert = $_SESSION['expert'];
 		session_destroy();
 	}
 
-	function addLanguageAchievement()
+	function addLanguageAchievement($checkLang)
 	{
 		global $db_conn, $userID;
 
 		$startDate = date("Y-m-d", time());
+		$achievementName = "Start a new Language: " . $checkLang;
 
-		$tuple = array(
+		$result = executePlainSQL("SELECT AchievementID FROM Achievement2 WHERE AchievementDescription='" . $achievementName . "'");
+		$aID = oci_fetch_row($result["statement"]);
+
+		$tuple1 = array(
 			":bind1" => $userID,
-			":bind2" => '46',
+			":bind2" => $aID[0]
+		);
+
+		$alltuples1 = array(
+			$tuple1
+		);
+
+		$checkAchievement = executeBoundSQL("SELECT COUNT(*) FROM Earns WHERE AchievementID=:bind2 AND UserID=:bind1", $alltuples1);
+		$row = oci_fetch_row($checkAchievement["statement"]);
+
+		if (is_Null($row[0]) || $row[0] > 0) {
+			return;
+		}
+
+		$tuple2 = array(
+			":bind1" => $userID,
+			":bind2" => $aID[0],
 			":bind3" => $startDate
 		);
 
-		$alltuples = array(
-			$tuple
+		$alltuples2 = array(
+			$tuple2
 		);
 
-		executeBoundSQL("INSERT INTO Earns VALUES (:bind1, :bind2, TO_DATE(:bind3, 'YYYY-MM-DD'))", $alltuples);
+		executeBoundSQL("INSERT INTO Earns VALUES (:bind1, :bind2, TO_DATE(:bind3, 'YYYY-MM-DD'))", $alltuples2);
+		echo "<font color='green'>New Achievement Earned: Initator </font>";
 		oci_commit($db_conn);
 	}
 
@@ -745,7 +767,6 @@ $expert = $_SESSION['expert'];
 				handleUpdateUserRequest();
 			} else if (array_key_exists('addLanguage', $_POST)) {
 				handleAddLanguageRequest();
-				addLanguageAchievement();
 			} else if (array_key_exists('removeLanguage', $_POST)) {
 				handleRemoveLanguageRequest();
 			} else if (array_key_exists('logoutRequest', $_POST)) {
