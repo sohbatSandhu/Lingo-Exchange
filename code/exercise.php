@@ -112,6 +112,7 @@ $expert = $_SESSION['expert'];
 	<h2>Mark Complete</h2>
 	<form method="POST" action="exercise.php">
 		<input type="hidden" id="markCompleteRequest" name="markCompleteRequest">
+		<p>Input the language and dialect you completed an exercise for.</p>
 		Language: <input type="text" name="languageName"> <br /><br />
 		Dialect: <input type="text" name="dialect"> <br /><br />
 
@@ -177,7 +178,7 @@ $expert = $_SESSION['expert'];
 	<hr />
 
 	<h2>Count Points Above Average</h2>
-	<p>View all the languages you completed exercises for and calculate the count of exercises which award points above average.</p>
+	<p>View all the languages that you completed exercises for and calculate the count of exercises which award points above average.</p>
 	<form method="GET" action="exercise.php">
 		<input type="hidden" id="countPointsRequest" name="countPointsRequest">
 		<input type="submit" value="Calculate" name="countPoints"></p>
@@ -313,7 +314,7 @@ $expert = $_SESSION['expert'];
 			</tr>"; 
 		}
 		echo "</table>";
-	} // warning on line 229: Undefined array key 3 - still printed the whole table
+	} 
 
 	function displayQuestion($result) 
 	{ //prints questions for each exercise from a select statement
@@ -335,8 +336,6 @@ $expert = $_SESSION['expert'];
 			</tr>"; 
 		}
 		echo "</table>";
-
-		//TODO: add error handling for empty tables
 	}
 
 	function displayCompleted($result) 
@@ -599,24 +598,31 @@ $expert = $_SESSION['expert'];
 			$tuple
 		);
 
-		$result = executeBoundSQL("SELECT c.LanguageName, COUNT(DISTINCT FltrPoints.Points) AS AboveAverage 
-								   FROM Completes c
-								   LEFT JOIN Exercise4 e
-								   ON c.ExerciseName = e.ExerciseName AND c.ExerciseNumber = e.ExerciseNumber
-								   LEFT JOIN (SELECT e1.Points
-								   			  FROM Exercise4 e1
-				  							  WHERE e1.Points > (SELECT AVG(e2.Points) 
-											  					FROM Completes c2 
-																LEFT JOIN Exercise4 e2
-								   			 					ON c2.ExerciseName = e2.ExerciseName AND c2.ExerciseNumber = e2.ExerciseNumber)) FltrPoints
-								   ON e.Points = FltrPoints.Points
-								   WHERE UserID = :bind1
-								   GROUP BY c.LanguageName", $alltuples);
-		oci_commit($db_conn);
+		$check = executeBoundSQL("SELECT COUNT(*) FROM Completes WHERE UserID = :bind1", $alltuples);
+		$counter = oci_fetch_row($check["statement"])[0];
 
-		if ($result["success"] == TRUE) {
-			countScores($result["statement"]);
-		} 
+		if($counter > 0) {
+			$result = executeBoundSQL("SELECT c.LanguageName, COUNT(DISTINCT FltrPoints.Points) AS AboveAverage 
+								   	   FROM Completes c
+								   	   LEFT JOIN Exercise4 e
+								   	   ON c.ExerciseName = e.ExerciseName AND c.ExerciseNumber = e.ExerciseNumber
+								   	   LEFT JOIN (SELECT e1.Points
+								   			  	  FROM Exercise4 e1
+				  							  	  WHERE e1.Points > (SELECT AVG(e2.Points) 
+											  						 FROM Completes c2 
+																	 LEFT JOIN Exercise4 e2
+								   			 						 ON c2.ExerciseName = e2.ExerciseName AND c2.ExerciseNumber = e2.ExerciseNumber)) FltrPoints
+								   	   ON e.Points = FltrPoints.Points
+								   	   WHERE UserID = :bind1
+								  	   GROUP BY c.LanguageName", $alltuples);
+			oci_commit($db_conn);
+
+			if ($result["success"] == TRUE) {
+				countScores($result["statement"]);
+			} 
+		} else {
+			echo "<p><b>You haven't completed any exercises yet!</b><p>";
+		}
 	}
 
 	// HANDLE ALL POST ROUTES
