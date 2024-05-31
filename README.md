@@ -4,6 +4,11 @@ Our application aspires to provide an engaging online environment that allows us
 Our focus extends beyond mere language acquisition - we strive to facilitate a comprehensive language learning journey. 
 Given this high-level goal, we consider the domain of our application to be language learning. 
 
+# Description
+- Designed and implemented with team, a robust database schema of 28 tables BCNF normalized with 230 instances supporting various aspects of language learning for a user, tracked progress using GitHub.
+- Utilized Oracle with SQLPlus for DBMS and PHP for backend/SQL connection
+- Developed SQL queries to retrieve and update information, forum interactions, and learning resources for 14 language dialect combinations for a user
+
 ---
 
 # Milestone 3 Task Timeline 
